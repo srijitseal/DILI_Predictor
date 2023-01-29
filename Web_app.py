@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
 import streamlit as st
 from typing import Union
 from urllib.parse import unquote, quote
@@ -300,7 +297,7 @@ def main():
         bottom = bottom[:1]
         print(bottom)
         
-    st.success(pred)
+    st.success(y_pred)
 
 if __name__ == '__main__': 
     main()   
