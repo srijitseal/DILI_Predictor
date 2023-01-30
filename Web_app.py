@@ -5,7 +5,7 @@ import streamlit as st
 from typing import Union
 from urllib.parse import unquote, quote
 import matplotlib.pyplot as plt
-
+import shap
 import numpy as np
 import pandas as pd
 from rdkit import Chem
@@ -34,7 +34,7 @@ import pandas as pd
 from rdkit.Chem import inchi
 from rdkit import Chem
 
-import shap
+
 
 def standardized_smiles(value):
     #print(value)
