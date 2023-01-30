@@ -298,14 +298,43 @@ def main():
         #Top 10 
         st.dataframe(top[:10])
         
-        st.write("Most contributing MACCS substructure to toxicity")
-        top_MACCS= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values
+        st.write("Most contributing MACCS substructure to DILI toxicity")
+        top_MACCS= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
+        top_MACCS_value= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
+        top_MACCS_shap= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
+        top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
+        
         st.write(top_MACCS)
+        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=200)
+          
+        if(top_MACCS_value==0):
+                 st.image(Draw.MolToImage(top_MACCSsubstructure)
+                 st.write("is absent. This contributes", top_MACCS_shap, "to prediction")
+                          
+        else:                                  
+            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=200)        
+            st.write("Presence of this substructure contributes", top_MACCS_shap, "to prediction")
+                     
+                     
         
         st.write("Top features contributing to safety: ")
         bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True).reset_index(drop=True)
         #Top 10 
         st.dataframe(bottom[:10])
+                 
+        st.write("Most contributing MACCS substructure to DILI safety")
+        bottom_MACCS= bottom[bottom.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
+        bottom_MACCS_value= bottom[bottom.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
+        bottom_MACCS_shap= bottom[bottom.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
+        bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
+                 
+        if(bottom_MACCS_value==0):
+                 st.image(Draw.MolToImage(bottom_MACCSsubstructure)
+                 st.write("is absent. This contributes", bottom_MACCS_shap, "to prediction")
+                          
+        else:                                  
+            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=200)        
+            st.write("Presence of this substructure contributes", bottom_MACCS_shap, "to prediction")
         
     st.success(1)
 
