@@ -290,11 +290,11 @@ def main():
         
         top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False).reset_index(drop=True)
         top = top[:1]
-        st.write(top)
+        st.dataframe(top)
         
         bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True).reset_index(drop=True)
         bottom = bottom[:1]
-        st.write(bottom)
+        st.dataframe(bottom)
         
     st.success(y_pred)
 
