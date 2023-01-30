@@ -154,10 +154,10 @@ def calc_all_fp_desc(data):
     a=calc_descriptors(data)
     descdf=pd.DataFrame(a, columns=descs)
     descdf_approved=descdf.reset_index(drop=True)
-    descdf_approved
+    #descdf_approved
     
     tox_model_data= pd.concat([data, Morgan_fingerprint_table, MACCSfingerprint_table, descdf_approved, Mordred_table], axis=1)
-    tox_model_data
+    #tox_model_data
     
     return(tox_model_data)
     
@@ -212,13 +212,13 @@ def predict_DILI(data):#log human_VDss_L_kg model
     
     y_pred  = [ 1 if y_proba>best_thresh  else 0] 
     
-    explainer = shap.TreeExplainer(loaded_rf)
-    shap_values = explainer.shap_values(X)
+    #explainer = shap.TreeExplainer(loaded_rf)
+    #shap_values = explainer.shap_values(X)
     
 
-    shap.force_plot(explainer.expected_value[1], 
-    shap_values[1], X.iloc[0],
-    matplotlib=True)
+    #shap.force_plot(explainer.expected_value[1], 
+    #shap_values[1], X.iloc[0],
+    #matplotlib=True)
     
     
     #flat_shaplist = [item for sublist in shap_values[1] for item in sublist]
