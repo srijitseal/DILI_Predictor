@@ -35,7 +35,6 @@ from rdkit.Chem import inchi
 from rdkit import Chem
 
 import shap
-shap.initjs()
 
 def standardized_smiles(value):
     #print(value)
