@@ -259,7 +259,7 @@ def main():
     """
 )
     
-    desc=pd.read_csv("all_features_desc.csv", encoding='windows-1252')
+    desc=pd.read_csv("./features/all_features_desc.csv", encoding='windows-1252')
     
     smile=st.text_input("Enter SMILES")
     smiles = unquote(smile)
