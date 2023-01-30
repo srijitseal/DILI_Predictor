@@ -305,11 +305,11 @@ def main():
         top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
       
         if(top_MACCS_value==0):
-            st.image(Draw.MolToImage(top_MACCSsubstructure))
+            st.image(Draw.MolToImage(top_MACCSsubstructure), width=400)
             st.write("is absent. This contributes", np.round(top_MACCS_shap, 4), "to prediction")
                           
         else:                                  
-            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=200))        
+            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
             st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
                      
                      
@@ -326,12 +326,12 @@ def main():
         bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
                  
         if(bottom_MACCS_value==0):
-            st.image(Draw.MolToImage(bottom_MACCSsubstructure))
+            st.image(Draw.MolToImage(bottom_MACCSsubstructure), width=400)
             st.write("is absent. This contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
                           
         else:                                  
-            #st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=200))  
-            st.image(Draw.MolsToGridImage([molecule], highlightAtomLists=[molecule.GetSubstructMatch(bottom_MACCSsubstructure)], subImgSize=(300, 300), useSVG=True), width=200)
+            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
+            #st.image(Draw.MolsToGridImage([molecule], highlightAtomLists=[molecule.GetSubstructMatch(bottom_MACCSsubstructure)], subImgSize=(300, 300), useSVG=True), width=200)
             st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
         
     st.success(1)
