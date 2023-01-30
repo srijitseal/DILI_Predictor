@@ -216,20 +216,21 @@ def predict_DILI(data):#log human_VDss_L_kg model
     shap_values = explainer.shap_values(X)
     
 
-    shap.force_plot(explainer.expected_value[1], 
-    shap_values[1], X.iloc[0],
-    matplotlib=True)
+    #shap.force_plot(explainer.expected_value[1], 
+    #shap_values[1], X.iloc[0],
+    #matplotlib=True)
     
     
-    flat_shaplist = [item for sublist in shap_values[1] for item in sublist]
+    #flat_shaplist = [item for sublist in shap_values[1] for item in sublist]
     
-    interpret = pd.DataFrame()
-    interpret["name"] = features
-    interpret["SHAP"] = flat_shaplist#print(flat_shaplist)
-    plt.show()
+    #interpret = pd.DataFrame()
+    #interpret["name"] = features
+    #interpret["SHAP"] = flat_shaplist#print(flat_shaplist)
+    #plt.show()
     # Explaining the 4th instance
 
-    return(interpret, y_proba, y_pred)
+    #return(interpret, y_proba, y_pred)
+    return(y_proba, y_pred)
 
 
 def mol2svg(mol):
@@ -277,20 +278,20 @@ def main():
         test_mfp_Mordred_liv = predict_liv_all(test_mfp_Mordred)
         test_mfp_Mordred_liv_values = test_mfp_Mordred_liv.T.reset_index().rename(columns={"index":"name", 0: "value"})
 
-        interpret, y_proba, y_pred = predict_DILI(test_mfp_Mordred_liv)   
-        interpret = pd.merge(interpret, desc, right_on="name", left_on="name", how="outer")
-        interpret = pd.merge(interpret, test_mfp_Mordred_liv_values, right_on="name", left_on="name", how="inner") 
+        y_proba, y_pred = predict_DILI(test_mfp_Mordred_liv)   
+        #interpret = pd.merge(interpret, desc, right_on="name", left_on="name", how="outer")
+        #interpret = pd.merge(interpret, test_mfp_Mordred_liv_values, right_on="name", left_on="name", how="inner") 
 
         print(y_proba[0])
         print(y_pred[0]) 
         
-        top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False).reset_index(drop=True)
-        top = top[:1]
-        print(top)
+        #top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False).reset_index(drop=True)
+        #top = top[:1]
+        #print(top)
         
-        bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True).reset_index(drop=True)
-        bottom = bottom[:1]
-        print(bottom)
+        #bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True).reset_index(drop=True)
+        #bottom = bottom[:1]
+        #print(bottom)
         
     st.success(y_pred)
 
