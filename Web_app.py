@@ -288,6 +288,11 @@ def main():
         print(y_proba[0])
         print(y_pred[0]) 
         
+        if(y_pred[0]==1):
+            st.write("The comppund is DILI-Positive")
+        if(y_pred[0]==o):
+            st.write("The comppund is DILI-Negative")
+        
         st.write("Top features contributing to toxicity: ")
         top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False).reset_index(drop=True)
         top = top[:10]
@@ -298,7 +303,7 @@ def main():
         bottom = bottom[:10]
         st.dataframe(bottom)
         
-    st.success(y_pred)
+    st.success(y_pred[0])
 
 if __name__ == '__main__': 
     main()   
