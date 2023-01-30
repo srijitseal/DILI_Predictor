@@ -3,3 +3,4 @@ mordred
 sklearn
 joblib
 matplotlib
+scikit-learn
