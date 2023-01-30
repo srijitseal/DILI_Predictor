@@ -330,7 +330,8 @@ def main():
             st.write("is absent. This contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
                           
         else:                                  
-            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=200))        
+            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=200))  
+            st.image(Draw.MolsToGridImage([molecule], highlightAtomLists=[molecule.GetSubstructMatch(bottom_MACCSsubstructure)], subImgSize=(300, 300), useSVG=True))
             st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
         
     st.success(1)
