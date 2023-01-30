@@ -295,13 +295,17 @@ def main():
         
         st.write("Top features contributing to toxicity: ")
         top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False).reset_index(drop=True)
-        top = top[:10]
-        st.dataframe(top)
+        #Top 10 
+        st.dataframe(top[:10])
+        
+        st.write("Most contributing MACCS substructure to toxicity")
+        top_MACCS= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values
+        st.write(top_MACCS)
         
         st.write("Top features contributing to safety: ")
         bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True).reset_index(drop=True)
-        bottom = bottom[:10]
-        st.dataframe(bottom)
+        #Top 10 
+        st.dataframe(bottom[:10])
         
     st.success(1)
 
