@@ -303,7 +303,7 @@ def main():
         bottom = bottom[:10]
         st.dataframe(bottom)
         
-    st.success(y_pred[0])
+    st.success(1)
 
 if __name__ == '__main__': 
     main()   
