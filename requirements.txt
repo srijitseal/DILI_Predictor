@@ -5,3 +5,4 @@ joblib
 matplotlib
 scikit-learn
 ipython
+molvs
