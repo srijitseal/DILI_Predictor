@@ -6,4 +6,3 @@ matplotlib
 scikit-learn
 ipython
 molvs
-shap
