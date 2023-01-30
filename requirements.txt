@@ -1,3 +1,5 @@
+numpy
+pandas
 rdkit-pypi
 mordred
 joblib
