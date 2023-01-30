@@ -290,7 +290,7 @@ def main():
         
         if(y_pred[0]==1):
             st.write("The comppund is DILI-Positive")
-        if(y_pred[0]==o):
+        if(y_pred[0]==0):
             st.write("The comppund is DILI-Negative")
         
         st.write("Top features contributing to toxicity: ")
