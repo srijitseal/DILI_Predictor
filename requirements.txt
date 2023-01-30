@@ -4,3 +4,4 @@ sklearn
 joblib
 matplotlib
 scikit-learn
+ipython
