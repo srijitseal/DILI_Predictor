@@ -4,7 +4,7 @@ rdkit-pypi
 mordred
 joblib
 matplotlib
-scikit-learn
+scikit-learn==1.1.1
 ipython
 molvs
 shap
