@@ -288,10 +288,12 @@ def main():
         print(y_proba[0])
         print(y_pred[0]) 
         
+        st.write("Top features contributing to toxicity: ")
         top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False).reset_index(drop=True)
         top = top[:10]
         st.dataframe(top)
         
+        st.write("Top features contributing to safety: ")
         bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True).reset_index(drop=True)
         bottom = bottom[:10]
         st.dataframe(bottom)
