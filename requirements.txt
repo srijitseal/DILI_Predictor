@@ -1,8 +1,8 @@
 rdkit-pypi
 mordred
-sklearn
 joblib
 matplotlib
 scikit-learn
 ipython
 molvs
+shap
