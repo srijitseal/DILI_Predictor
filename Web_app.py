@@ -327,11 +327,11 @@ def main():
                  
         if(bottom_MACCS_value==0):
             st.image(Draw.MolToImage(bottom_MACCSsubstructure)
-            st.write("is absent. This contributes", bottom_MACCS_shap, "to prediction")
+            #st.write("is absent. This contributes", bottom_MACCS_shap, "to prediction")
                           
         else:                                  
             st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=200)        
-            st.write("Presence of this substructure contributes", bottom_MACCS_shap, "to prediction")
+            #st.write("Presence of this substructure contributes", bottom_MACCS_shap, "to prediction")
         
     st.success(1)
 
