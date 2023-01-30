@@ -251,7 +251,7 @@ def main():
     initial_sidebar_state="expanded"
     )
     
-    st.image("Logo.png", width=150)
+    st.image("Logo.png", width=350)
     st.title("DILI PRedictor")
     st.write(
     """
