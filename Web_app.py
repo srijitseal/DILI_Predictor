@@ -289,9 +289,9 @@ def main():
         print(y_pred[0]) 
         
         if(y_pred[0]==1):
-            st.write("The comppund is DILI-Positive")
+            st.write("The compound is predicted DILI-Positive")
         if(y_pred[0]==0):
-            st.write("The comppund is DILI-Negative")
+            st.write("The compound is predicted DILI-Negative")
         
         st.write("Top features contributing to toxicity: ")
         top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False).reset_index(drop=True)
