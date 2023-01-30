@@ -303,13 +303,10 @@ def main():
         top_MACCS_value= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
         top_MACCS_shap= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
         top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
-        
-        st.write(top_MACCS)
-        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=200)
-          
+      
         if(top_MACCS_value==0):
-                 st.image(Draw.MolToImage(top_MACCSsubstructure)
-                 st.write("is absent. This contributes", top_MACCS_shap, "to prediction")
+            st.image(Draw.MolToImage(top_MACCSsubstructure)
+            st.write("is absent. This contributes", top_MACCS_shap, "to prediction")
                           
         else:                                  
             st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=200)        
