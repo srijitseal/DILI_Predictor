@@ -128,7 +128,7 @@ descs = [ 'PSA', 'n_rot_bonds', 'n_rings', 'n_ar_rings',
 def calc_all_fp_desc(data):
    
     calc = Calculator(descriptors, ignore_3D=True)
-    print(len(calc.descriptors))
+    #print(len(calc.descriptors))
     Ser_Mol = data['smiles_r'].apply(Chem.MolFromSmiles)
     # as pandas
     Mordred_table=  calc.pandas(Ser_Mol)
@@ -208,7 +208,7 @@ def predict_DILI(data):#log human_VDss_L_kg model
     X = data[features]
     y_proba =  loaded_rf.predict_proba(X)[:,1]
     best_thresh = 0.622537
-    print('Best Threshold=%f' % (best_thresh))
+    #print('Best Threshold=%f' % (best_thresh))
     
     y_pred  = [ 1 if y_proba>best_thresh  else 0] 
     
@@ -216,9 +216,9 @@ def predict_DILI(data):#log human_VDss_L_kg model
     shap_values = explainer.shap_values(X)
     
 
-    #shap.force_plot(explainer.expected_value[1], 
-    #shap_values[1], X.iloc[0],
-    #matplotlib=True)
+    shap.force_plot(explainer.expected_value[1], 
+    shap_values[1], X.iloc[0],
+    matplotlib=True)
     
     
     #flat_shaplist = [item for sublist in shap_values[1] for item in sublist]
