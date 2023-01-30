@@ -26,7 +26,7 @@ from rdkit import Chem
 from rdkit import RDPaths
 from rdkit.Chem.Draw import IPythonConsole
 from rdkit.Chem import Draw
-from rdkit.Chem.Draw import rdMolDraw2D
+from rdkit.Chem.Draw import rdMolDraw2D, MolToImage
 from rdkit.Chem.Draw import MolDraw2DSVG
 from sklearn.decomposition import PCA
 from molvs import standardize_smiles
@@ -274,6 +274,9 @@ def main():
     
     if st.button('Predict DILI'):
         
+        molecule = Chem.MolFromSmiles(smiles_r)     
+        st.image(Draw.MolToImage(molecule), width=200)
+                
         test_mfp_Mordred = calc_all_fp_desc(test)
         test_mfp_Mordred_liv = predict_liv_all(test_mfp_Mordred)
         test_mfp_Mordred_liv_values = test_mfp_Mordred_liv.T.reset_index().rename(columns={"index":"name", 0: "value"})
