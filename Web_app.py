@@ -168,7 +168,7 @@ def predict_individual_liv_data(data_dummy, features, endpoint):#predict animal 
     
     
 
-    loaded_rf = pickle.load(open(f"bestlivmodel_{endpoint}_model.sav", 'rb'))
+    loaded_rf = pickle.load(open(f"./models/bestlivmodel_{endpoint}_model.sav", 'rb'))
 
     X = data_dummy[features]
     X = X.values
@@ -179,7 +179,7 @@ def predict_individual_liv_data(data_dummy, features, endpoint):#predict animal 
 
 def predict_liv_all(data):
     #Read columns needed for rat data
-    file = open(f"./features_morgan_mordred_maccs_physc.txt", "r")
+    file = open(f"./features/features_morgan_mordred_maccs_physc.txt", "r")
     file_lines = file.read()
     features = file_lines.split("\n")
     features = features[:-1]
@@ -197,13 +197,13 @@ def predict_liv_all(data):
 def predict_DILI(data):#log human_VDss_L_kg model
     
     #Read columns needed for rat data
-    file = open(f"./features_morgan_mordred_maccs_physc.txt", "r")
+    file = open(f"./features/features_morgan_mordred_maccs_physc.txt", "r")
     file_lines = file.read()
     features = file_lines.split("\n")
     features = features[:-1]
     
     features = list(features) + list(liv_data)
-    loaded_rf = pickle.load(open("./final_dili_model.sav", 'rb'))
+    loaded_rf = pickle.load(open("./models/final_dili_model.sav", 'rb'))
 
     X = data[features]
     y_proba =  loaded_rf.predict_proba(X)[:,1]
