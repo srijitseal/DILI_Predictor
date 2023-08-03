@@ -1,5 +1,4 @@
-numpy
-numba
+numpy==1.24.4
 pandas
 matplotlib
 rdkit-pypi
@@ -9,4 +8,5 @@ matplotlib
 scikit-learn==1.1.1
 ipython
 molvs
+numpy==1.24.4
 shap
