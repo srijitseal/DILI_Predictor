@@ -1,5 +1,5 @@
+streamlit
 numpy==1.23.5
-numba==0.57.1
 pandas
 matplotlib
 rdkit-pypi
