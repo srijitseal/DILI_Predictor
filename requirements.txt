@@ -1,3 +1,4 @@
+numpy==1.23
 pandas
 matplotlib
 rdkit-pypi
@@ -7,4 +8,4 @@ matplotlib
 scikit-learn==1.1.1
 ipython
 molvs
-numpy==1.23
+shap
