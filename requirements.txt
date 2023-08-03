@@ -8,4 +8,3 @@ scikit-learn==1.1.1
 ipython
 molvs
 numpy==1.23
-shap
