@@ -320,8 +320,7 @@ def main():
             st.write("The compound is predicted DILI-Positive")
         if(y_pred[0]==0):
             st.write("The compound is predicted DILI-Negative")
-        
-        st.write("Most contributing MACCS substructure to DILI toxicity")
+
         
         top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False)
         proxy_DILI_SHAP_top = pd.merge(info, top[top["name"].isin(liv_data)])
@@ -334,11 +333,8 @@ def main():
         top_MACCS_value= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
         top_MACCS_shap= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0] 
         top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
-        
-        
-                     
-                 
-        st.write("Most contributing MACCS substructure to DILI safety")
+       
+       
         bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True)
         proxy_DILI_SHAP_bottom = pd.merge(info, bottom[bottom["name"].isin(liv_data)])
         proxy_DILI_SHAP_bottom["pred"] = proxy_DILI_SHAP_bottom["value"]>0.50
@@ -356,22 +352,23 @@ def main():
         SHAP["name"] = SHAP["name"].astype(int)
         SHAP = SHAP.sort_values(by=["name"], ascending=True)
         #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
-        sns.set_style('white')
-        sns.set_context('paper', font_scale=2)
+        #sns.set_style('white')
+        #sns.set_context('paper', font_scale=2)
         hue_order = ['Positive', 'Negative']
-        #sns.barplot(data=compound, x="source", y="value", color='grey')
         g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
-                        palette="Greys", dodge=False, legend=True,)
-                        #height=5, aspect=2)
+                        palette="Greys", dodge=False, legend=True,
+                        height=5, aspect=2)
         g.set_xticklabels(rotation=90)
         g.set(ylabel=None)
         g.set(xlabel="PRedicted Probability")
         g.set(ylim=(0, 1))
         st.pyplot(g)
         
+        st.write("Most contributing MACCS substructure to DILI toxicity")
         st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
         st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
         
+        st.write("Most contributing MACCS substructure to DILI safety")
         st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
         st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
         
