@@ -302,6 +302,8 @@ def main():
     
     if st.button('Predict DILI'):
         
+        with st.spinner('Calculating...'):
+            
         molecule = Chem.MolFromSmiles(smiles_r)     
         st.image(Draw.MolToImage(molecule), width=200)
                 
