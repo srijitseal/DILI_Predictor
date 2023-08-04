@@ -355,9 +355,6 @@ def main():
                                   
         st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
         st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
-
-        compound = SHAP[SHAP["compound"]==compound_name].sort_values(by=["name"], ascending=True)
-        print(len(compound))
         
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
