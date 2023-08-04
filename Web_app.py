@@ -260,7 +260,33 @@ def main():
 )
     
     desc=pd.read_csv("./features/all_features_desc.csv", encoding='windows-1252')
-    info=pd.read_csv("./features/proxyDILI_labels.csv")
+    source = ["Liver Toxicity Knowledge Base",
+        "Human hepatotoxicity",
+        "Animal hepatotoxicity A",
+        "Animal hepatotoxicity B",
+        "Preclinical hepatotoxicity",
+        "Diverse DILI A",
+        "Diverse DILI B",
+        "Diverse DILI C",
+        "BESP",
+        "Mitotox",
+        "Reactive Metabolite"]
+        
+        
+    assaytype = ["DILI",
+        "Human hepatotoxicity",
+        "Animal hepatotoxicity",
+        "Animal hepatotoxicity",
+        "Animal hepatotoxicity",
+        "Heterogenous Data ",
+        "Heterogenous Data ",
+        "Heterogenous Data ",
+        "Mechanisms of Liver Toxicity",
+        "Mechanisms of Liver Toxicity",
+        "Mechanisms of Liver Toxicity"]
+        
+        
+    info = pd.DataFrame({"name": liv_data, "source": source, "assaytype": assaytype})
     SHAP =pd.DataFrame(columns=['name', 'source', 'assaytype', 'SHAP', 'description', 'value', 'pred','influence', 'smiles'])
     
     smile=st.text_input("Enter SMILES")
