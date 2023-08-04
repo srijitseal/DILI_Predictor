@@ -347,6 +347,17 @@ def main():
         bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
         bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
         
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write("Most contributing MACCS substructure to DILI toxicity")
+            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
+            st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
+            
+            st.write("Most contributing MACCS substructure to DILI safety")
+            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
+            st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
+
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
         SHAP["name"] = SHAP["name"].astype(int)
@@ -360,17 +371,12 @@ def main():
                         height=5, aspect=2)
         g.set_xticklabels(rotation=90)
         g.set(ylabel=None)
-        g.set(xlabel="PRedicted Probability")
+        g.set(xlabel="Predicted Probability")
         g.set(ylim=(0, 1))
-        st.pyplot(g)
         
-        st.write("Most contributing MACCS substructure to DILI toxicity")
-        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
-        st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
         
-        st.write("Most contributing MACCS substructure to DILI safety")
-        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
-        st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
+        with col2:
+            st.pyplot(g)
         
         st.success(1)
 
