@@ -241,7 +241,9 @@ def mol2svg(mol):
     return d2d.GetDrawingText()
 
 
-    
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('utf-8')    
 
 def main():
     
@@ -386,6 +388,35 @@ def main():
                 with col2:
                     st.write("Labels from proxy-DILI predictions that are positively and negatively contributing to the DILI prediction")
                     st.pyplot(g)
+
+                #Dowload Predictions
+
+                preds_dict_download = {
+
+                'smiles':[smiles],
+                'smiles_r':[smiles_r],
+                'DILI_Predicted_Probability':[y_proba[0]],   
+                'DILI_Predicted':[y_pred[0]],   
+                }
+                    
+                preds_dict_download = pd.DataFrame(preds_dict_download)
+                preds_dict_download = convert_df(preds_dict_download)
+                
+                with col1:
+                    st.download_button(
+                    label="Download DILI prediction as CSV",
+                    data=preds_dict_download,
+                    file_name='DILI_Predictions.csv',
+                    mime='text/csv',
+                )
+
+                with col2:
+                    st.download_button(
+                    label="Download proxy-DILI predictions as CSV",
+                    data=SHAP,
+                    file_name='SHAP.csv',
+                    mime='text/csv',
+                )
                 
                 st.success("Complete")
             
