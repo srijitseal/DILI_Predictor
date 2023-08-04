@@ -371,8 +371,8 @@ def main():
                 SHAP["name"] = SHAP["name"].astype(int)
                 SHAP = SHAP.sort_values(by=["name"], ascending=True)
                 #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
-                #sns.set_style('white')
-                #sns.set_context('paper', font_scale=2)
+                sns.set_style('white')
+                sns.set_context('paper', font_scale=2)
                 hue_order = ['Positive', 'Negative']
                 g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
                                 palette="Greys", dodge=False, legend=True,
