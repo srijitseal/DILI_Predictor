@@ -402,7 +402,7 @@ def main():
                     mime='text/csv',
                 )
 
-                preds_DILI = {
+                preds_DILI = pd.DataFrame({
 
                 "source": ["DILI"], 
                 "assaytype": ["DILIist_FDA"], 
@@ -411,7 +411,7 @@ def main():
                 "pred": [y_pred[0]], 
                 "SHAP contribution to Toxicity": ["N/A"], 
                 "SHAP": ["N/A"]
-                }
+                })
                 
                 SHAP=SHAP[["source", "assaytype", "description", "value", "pred", "SHAP contribution to Toxicity", "SHAP"]]
                 SHAP = pd.concat([preds_DILI, SHAP]).reset_index(drop=True)
