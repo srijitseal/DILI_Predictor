@@ -5,6 +5,7 @@ import streamlit as st
 from typing import Union
 from urllib.parse import unquote, quote
 import matplotlib.pyplot as plt
+import seaborn as sns
 import shap
 import numpy as np
 import pandas as pd
@@ -355,9 +356,28 @@ def main():
         st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
         st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
 
-    
+        compound = SHAP[SHAP["compound"]==compound_name].sort_values(by=["name"], ascending=True)
+        print(len(compound))
         
-    st.success(1)
+        SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
+        SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
+    
+        #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
+        sns.set_style('white')
+        sns.set_context('paper', font_scale=2)
+        hue_order = ['Positive', 'Negative']
+        #sns.barplot(data=compound, x="source", y="value", color='grey')
+        g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
+                        palette="Greys", 
+                        height=5, aspect=2, dodge=False, legend=False)
+        g.set_xticklabels(rotation=90)
+        g.set(ylabel=None)
+        g.set(xlabel=None)
+        g.set(ylim=(0, 1))
+        
+        st.pyplot(g.get_figure())
+        
+        st.success(1)
 
 if __name__ == '__main__': 
     main()   
