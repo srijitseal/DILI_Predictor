@@ -304,50 +304,50 @@ def main():
         
         with st.spinner('Calculating...'):
             
-        molecule = Chem.MolFromSmiles(smiles_r)     
-        st.image(Draw.MolToImage(molecule), width=200)
-                
-        test_mfp_Mordred = calc_all_fp_desc(test)
-        test_mfp_Mordred_liv = predict_liv_all(test_mfp_Mordred)
-        test_mfp_Mordred_liv_values = test_mfp_Mordred_liv.T.reset_index().rename(columns={"index":"name", 0: "value"})
-
-        interpret, y_proba, y_pred = predict_DILI(test_mfp_Mordred_liv)   
-        interpret = pd.merge(interpret, desc, right_on="name", left_on="name", how="outer")
-        interpret = pd.merge(interpret, test_mfp_Mordred_liv_values, right_on="name", left_on="name", how="inner") 
-
-        print(y_proba[0])
-        print(y_pred[0]) 
-        
-        if(y_pred[0]==1):
-            st.write("The compound is predicted DILI-Positive")
-        if(y_pred[0]==0):
-            st.write("The compound is predicted DILI-Negative")
-
-        
-        top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False)
-        proxy_DILI_SHAP_top = pd.merge(info, top[top["name"].isin(liv_data)])
-        proxy_DILI_SHAP_top["pred"] = proxy_DILI_SHAP_top["value"]>0.50
-        proxy_DILI_SHAP_top["SHAP contribution to Toxicity"] = "Positive"
-        proxy_DILI_SHAP_top["smiles"] = smiles_r
-        
-        top_positives = top[top["value"]==1]
-        top_MACCS= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
-        top_MACCS_value= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
-        top_MACCS_shap= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0] 
-        top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
-       
-       
-        bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True)
-        proxy_DILI_SHAP_bottom = pd.merge(info, bottom[bottom["name"].isin(liv_data)])
-        proxy_DILI_SHAP_bottom["pred"] = proxy_DILI_SHAP_bottom["value"]>0.50
-        proxy_DILI_SHAP_bottom["SHAP contribution to Toxicity"] = "Negative"
-        proxy_DILI_SHAP_bottom["smiles"] = smiles_r
-        
-        bottom_positives = bottom[bottom["value"]==1]
-        bottom_MACCS= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
-        bottom_MACCS_value= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
-        bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
-        bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
+            molecule = Chem.MolFromSmiles(smiles_r)     
+            st.image(Draw.MolToImage(molecule), width=200)
+                    
+            test_mfp_Mordred = calc_all_fp_desc(test)
+            test_mfp_Mordred_liv = predict_liv_all(test_mfp_Mordred)
+            test_mfp_Mordred_liv_values = test_mfp_Mordred_liv.T.reset_index().rename(columns={"index":"name", 0: "value"})
+    
+            interpret, y_proba, y_pred = predict_DILI(test_mfp_Mordred_liv)   
+            interpret = pd.merge(interpret, desc, right_on="name", left_on="name", how="outer")
+            interpret = pd.merge(interpret, test_mfp_Mordred_liv_values, right_on="name", left_on="name", how="inner") 
+    
+            print(y_proba[0])
+            print(y_pred[0]) 
+            
+            if(y_pred[0]==1):
+                st.write("The compound is predicted DILI-Positive")
+            if(y_pred[0]==0):
+                st.write("The compound is predicted DILI-Negative")
+    
+            
+            top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False)
+            proxy_DILI_SHAP_top = pd.merge(info, top[top["name"].isin(liv_data)])
+            proxy_DILI_SHAP_top["pred"] = proxy_DILI_SHAP_top["value"]>0.50
+            proxy_DILI_SHAP_top["SHAP contribution to Toxicity"] = "Positive"
+            proxy_DILI_SHAP_top["smiles"] = smiles_r
+            
+            top_positives = top[top["value"]==1]
+            top_MACCS= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
+            top_MACCS_value= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
+            top_MACCS_shap= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0] 
+            top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
+           
+           
+            bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True)
+            proxy_DILI_SHAP_bottom = pd.merge(info, bottom[bottom["name"].isin(liv_data)])
+            proxy_DILI_SHAP_bottom["pred"] = proxy_DILI_SHAP_bottom["value"]>0.50
+            proxy_DILI_SHAP_bottom["SHAP contribution to Toxicity"] = "Negative"
+            proxy_DILI_SHAP_bottom["smiles"] = smiles_r
+            
+            bottom_positives = bottom[bottom["value"]==1]
+            bottom_MACCS= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
+            bottom_MACCS_value= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
+            bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
+            bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
         
         col1, col2 = st.columns(2)
         
