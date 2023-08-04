@@ -260,13 +260,14 @@ def main():
 )
     
     desc=pd.read_csv("./features/all_features_desc.csv", encoding='windows-1252')
+    info=pd.read_csv("./features/proxyDILI_labels.csv")
+    SHAP =pd.DataFrame(columns=['name', 'source', 'assaytype', 'SHAP', 'description', 'value', 'pred','influence', 'smiles'])
     
     smile=st.text_input("Enter SMILES")
     smiles = unquote(smile)
     smiles_r = standardized_smiles(smiles)
     test = {'smiles_r':  [smiles_r] }
     test = pd.DataFrame(test)
-    
     
     #predict
     y_pred = ''
@@ -293,46 +294,44 @@ def main():
         if(y_pred[0]==0):
             st.write("The compound is predicted DILI-Negative")
         
-        st.write("Top features contributing to toxicity: ")
-        top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False).reset_index(drop=True)
-        #Top 10 
-        st.dataframe(top[:10])
-        
         st.write("Most contributing MACCS substructure to DILI toxicity")
-        top_MACCS= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
-        top_MACCS_value= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
-        top_MACCS_shap= top[top.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
-        top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
-      
-        if(top_MACCS_value==0):
-            st.image(Draw.MolToImage(top_MACCSsubstructure), width=400)
-            st.write("is absent. This contributes", np.round(top_MACCS_shap, 4), "to prediction")
-                          
-        else:                                  
-            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
-            st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
-                     
-                     
         
-        st.write("Top features contributing to safety: ")
-        bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True).reset_index(drop=True)
-        #Top 10 
-        st.dataframe(bottom[:10])
+        top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False)
+        proxy_DILI_SHAP_top = pd.merge(info, top[top["name"].isin(liv_data)])
+        proxy_DILI_SHAP_top["pred"] = proxy_DILI_SHAP_top["value"]>0.50
+        proxy_DILI_SHAP_top["SHAP contribution to Toxicity"] = "Positive"
+        proxy_DILI_SHAP_top["smiles"] = s
+        proxy_DILI_SHAP_top["compound"] = n
+        
+        top_positives = top[top["value"]==1]
+        top_MACCS= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
+        top_MACCS_value= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
+        top_MACCS_shap= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0] 
+        top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
+        
+        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
+        st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
+                     
                  
         st.write("Most contributing MACCS substructure to DILI safety")
-        bottom_MACCS= bottom[bottom.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
-        bottom_MACCS_value= bottom[bottom.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
-        bottom_MACCS_shap= bottom[bottom.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
+        bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True)
+        proxy_DILI_SHAP_bottom = pd.merge(info, bottom[bottom["name"].isin(liv_data)])
+        proxy_DILI_SHAP_bottom["pred"] = proxy_DILI_SHAP_bottom["value"]>0.50
+        proxy_DILI_SHAP_bottom["SHAP contribution to Toxicity"] = "Negative"
+        proxy_DILI_SHAP_bottom["smiles"] = s
+        proxy_DILI_SHAP_bottom["compound"] = n
+        
+        bottom_positives = bottom[bottom["value"]==1]
+        bottom_MACCS= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
+        bottom_MACCS_value= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
+        bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
         bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
                  
-        if(bottom_MACCS_value==0):
-            st.image(Draw.MolToImage(bottom_MACCSsubstructure), width=400)
-            st.write("is absent. This contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
-                          
-        else:                                  
-            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
-            #st.image(Draw.MolsToGridImage([molecule], highlightAtomLists=[molecule.GetSubstructMatch(bottom_MACCSsubstructure)], subImgSize=(300, 300), useSVG=True), width=200)
-            st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
+                                  
+        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
+        st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
+
+    
         
     st.success(1)
 
