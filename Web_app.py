@@ -162,7 +162,7 @@ def calc_all_fp_desc(data):
     return(tox_model_data)
     
     
-liv_data = [ "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9", "10", "11", "14", "15", "16"]
+liv_data = [ "2",  "3",  "5",  "6",  "7",  "8",   "10", "11", "14", "15", "16"]
 
 def predict_individual_liv_data(data_dummy, features, endpoint):#predict animal data
     
