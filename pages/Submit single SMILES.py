@@ -414,7 +414,7 @@ def main():
                 }
                 
                 SHAP=SHAP[["source", "assaytype", "description", "value", "pred", "SHAP contribution to Toxicity", "SHAP"]]
-                SHAP = pd.concat([new_row, SHAP]).reset_index(drop=True)
+                SHAP = pd.concat([preds_DILI, SHAP]).reset_index(drop=True)
                 SHAP["smiles"] = smiles
                 SHAP["smiles_r"] = smiles_r
                 SHAP = convert_df(SHAP)
