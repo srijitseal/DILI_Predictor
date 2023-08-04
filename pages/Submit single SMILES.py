@@ -412,7 +412,7 @@ def main():
 
                 SHAP = convert_df(SHAP)
                 
-                with col2:
+                with col1:
                     st.download_button(
                     label="Download proxy-DILI predictions as CSV",
                     data=SHAP,
