@@ -327,9 +327,9 @@ def main():
                 print(y_pred[0]) 
                 
                 if(y_pred[0]==1):
-                    st.write("The compound is predicted **_DILI-Positive_**")
+                    st.subheader("The compound is predicted **_DILI-Positive_**")
                 if(y_pred[0]==0):
-                    st.write("The compound is predicted DILI-Negative")
+                    st.subheader("The compound is predicted **_DILI-Negative_**")
         
                 
                 top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False)
@@ -358,12 +358,12 @@ def main():
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.header("Most contributing MACCS substructure to :red[DILI toxicity]")
+                    st.subheader("Most contributing MACCS substructure to :red[DILI toxicity]")
                     st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=600))        
                     st.write(top_MACCS)
                     st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to toxicity")
                     
-                    st.header("Most contributing MACCS substructure to :blue[DILI safety]")
+                    st.subheader("Most contributing MACCS substructure to :blue[DILI safety]")
                     st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=600))  
                     st.write(bottom_MACCS)
                     st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to safety")
