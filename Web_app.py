@@ -353,6 +353,7 @@ def main():
         
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
+        SHAP["name"] = SHAP["name"].astype(int)
         SHAP = SHAP.sort_values(by=["name"], ascending=True)
         #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
         sns.set_style('white')
@@ -361,7 +362,7 @@ def main():
         #sns.barplot(data=compound, x="source", y="value", color='grey')
         g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
                         palette="Greys", 
-                        height=5, aspect=2, dodge=False, legend=False)
+                        height=5, aspect=2, dodge=False, legend=True)
         g.set_xticklabels(rotation=90)
         g.set(ylabel=None)
         g.set(xlabel=None)
