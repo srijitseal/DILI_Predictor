@@ -359,11 +359,11 @@ def main():
                 
                 with col1:
                     st.write("Most contributing MACCS substructure to DILI toxicity")
-                    st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
+                    st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=600))        
                     st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
                     
                     st.write("Most contributing MACCS substructure to DILI safety")
-                    st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
+                    st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=600))  
                     st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
         
                 SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
