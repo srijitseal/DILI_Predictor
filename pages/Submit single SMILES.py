@@ -360,11 +360,13 @@ def main():
                 with col1:
                     st.write("Most contributing MACCS substructure to DILI toxicity")
                     st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=600))        
-                    st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
+                    st.write(top_MACCSsubstructure)
+                    st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to toxicity")
                     
                     st.write("Most contributing MACCS substructure to DILI safety")
                     st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=600))  
-                    st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
+                    st.write(bottom_MACCSsubstructure)
+                    st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to safety")
         
                 SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
                 SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
@@ -398,12 +400,12 @@ def main():
                 "SHAP contribution to Toxicity": ["N/A"], 
                 "SHAP": ["N/A"]
                 })
-                print(preds_DILI)
+                #print(preds_DILI)
                 
                 SHAP=SHAP[["source", "assaytype", "description", "value", "pred", "SHAP contribution to Toxicity", "SHAP"]]
-                print(SHAP)
+                #print(SHAP)
                 SHAP = pd.concat([preds_DILI, SHAP]).reset_index(drop=True)
-                print(SHAP)
+                #print(SHAP)
                 SHAP["smiles"] = smiles
                 SHAP["smiles_r"] = smiles_r
                 SHAP = convert_df(SHAP)
@@ -412,7 +414,7 @@ def main():
                     st.download_button(
                     label="Download DILI and proxy-DILI predictions as CSV",
                     data=SHAP,
-                    file_name='SHAP.csv',
+                    file_name='Predictions.csv',
                     mime='text/csv',
                     )
                 
