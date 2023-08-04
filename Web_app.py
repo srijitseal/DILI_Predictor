@@ -372,7 +372,7 @@ def main():
         g.set(xlabel=None)
         g.set(ylim=(0, 1))
         
-        st.pyplot(g.get_figure())
+        st.pyplot(g)
         
         st.success(1)
 
