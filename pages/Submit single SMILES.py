@@ -327,7 +327,7 @@ def main():
                 print(y_pred[0]) 
                 
                 if(y_pred[0]==1):
-                    st.write("The compound is predicted DILI-Positive")
+                    st.write("The compound is predicted **_DILI-Positive_**")
                 if(y_pred[0]==0):
                     st.write("The compound is predicted DILI-Negative")
         
@@ -358,12 +358,12 @@ def main():
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.write("Most contributing MACCS substructure to DILI toxicity")
+                    st.header("Most contributing MACCS substructure to :red[DILI toxicity]")
                     st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=600))        
                     st.write(top_MACCS)
                     st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to toxicity")
                     
-                    st.write("Most contributing MACCS substructure to DILI safety")
+                    st.header("Most contributing MACCS substructure to :blue[DILI safety]")
                     st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=600))  
                     st.write(bottom_MACCS)
                     st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to safety")
@@ -386,7 +386,7 @@ def main():
                 
                 
                 with col2:
-                    st.write("Labels from proxy-DILI predictions that are positively and negatively contributing to the DILI prediction")
+                    st.header("Labels from proxy-DILI predictions that are positively and negatively contributing to the DILI prediction")
                     st.pyplot(g)
 
                 #Dowload Predictions
