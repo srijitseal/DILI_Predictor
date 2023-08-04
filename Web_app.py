@@ -353,6 +353,7 @@ def main():
         
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
+        SHAP = SHAP.sort_values(by=["name"], ascending=True)
         #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
         sns.set_style('white')
         sns.set_context('paper', font_scale=2)
