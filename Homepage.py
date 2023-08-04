@@ -1,18 +1,18 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="PKSmart",
-    page_icon="logo_icon.png",
+    page_title="DILI Predictor",
+    page_icon="Logo.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 left_col, right_col = st.columns(2)
 
-right_col.write("# Welcome to PKSmart")
+right_col.write("# Welcome to DILI Predictor")
 right_col.write("v1.1.3")
-right_col.write("Created by Srijit Seal and Andreas Bender")
-left_col.image("logo_front.png")
+right_col.write("Created by Srijit Seal, Ola Spjuth and Andreas Bender")
+left_col.image("Logo.png")
 
 
 
@@ -20,9 +20,17 @@ st.sidebar.success("")
 
 st.markdown(
 """
-    PKSmart is an open-source app framework built specifically for
-    predicting human and animal PK parameters.
-    Select from the sidebar to predict single molecule PK properties or submit a bulk job!
+    DILI Predictor is an open-source app framework built specifically for
+    human drug-induced liver injury (DILI)  
+
+    DILI Predictor employs eleven proxy-DILI labels from in vitro 
+    (e.g., mitochondrial toxicity, bile salt export pump inhibition) 
+    and in vivo (e.g., preclinical rat hepatotoxicity studies) 
+    datasets along with structural fingerprints and physicochemical 
+    parameters as features.
+    
+    Select from the sidebar to predict DILI for a single molecule!
+    For bulk jobs, or local use: use code from Github page: https://github.com/srijitseal/DILI_Predictor
     
     ### Want to learn more?
     - Check out our paper at [bioarxiv](https://streamlit.io)
@@ -41,9 +49,7 @@ left_col.markdown(
         the following pages in the PK Predictor application:
         - **Home Page:** You are here!
         - **Documentation:** Explains how the algorithm works and the overview of the models
-        - **Submit single SMILES:** You can enter the smiles of the query compound here to obtain a detailed analysis of predicted human PK parameters with the chemical space comparisons to training data and also the predicted animal PK parameters used by the model.
-        - **Submit batch SMILES:** You can dowload the predicted human and animal parameters for a batch of smiles that you can type while seperating by a comma (,).
-        - **Submit batch SMILES upload file:** Got a txt file with smiles on each line? Upload here to download batch results!
+        - **Submit single SMILES:** You can enter the smiles of the query compound here to obtain a detailed analysis of the predicted DILI and also proxy-DILI labels used by the model.
         """
     )
 st.markdown("---")
@@ -56,10 +62,10 @@ left_info_col.markdown(
         f"""
         ### Authors
         
-        ##### Srijit Seal [![Follow](https://img.shields.io/twitter/follow/srijitseal?style=social)](https://www.twitter.com/srijitseal)
+        ##### Srijit Seal 
         - Email:  <ss2686@cam.ac.uk>
         - GitHub: https://github.com/srijitseal
-        ##### Andreas Bender [![Follow](https://img.shields.io/twitter/follow/AndreasBenderUK?style=social)](https://www.twitter.com/AndreasBenderUK)
+        ##### Andreas Bender
         - Email: <ab454@cam.ac.uk>
         """,
         unsafe_allow_html=True,
@@ -68,12 +74,7 @@ left_info_col.markdown(
 right_info_col.markdown(
         """
         ### Funding
-        - Cambridge Centre for Data Driven Discovery and Accelerate Programme for Scientific Discovery under the project title “Theoretical, Scientific, and Philosophical Perspectives on Biological Understanding in the Age of Artificial Intelligence”, made possible by a donation from Schmidt Futures
-        - Cambridge Commonwealth, European and International Trust
-        - Boak Student Support Fund (Clare Hall)
-        - Jawaharlal Nehru Memorial Fund
-        - Allen, Meek and Read Fund
-        - Trinity Henry Barlow (Trinity College)
+        - Cambridge Centre for Data-Driven Discovery and Accelerate Programme for Scientific Discovery
          """
     )
 
