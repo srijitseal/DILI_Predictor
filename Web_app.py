@@ -361,11 +361,11 @@ def main():
         hue_order = ['Positive', 'Negative']
         #sns.barplot(data=compound, x="source", y="value", color='grey')
         g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
-                        palette="Greys", 
-                        height=5, aspect=2, dodge=False, legend=True)
+                        palette="Greys", dodge=False, legend=True,)
+                        #height=5, aspect=2)
         g.set_xticklabels(rotation=90)
         g.set(ylabel=None)
-        g.set(xlabel=None)
+        g.set(xlabel="PRedicted Probability")
         g.set(ylim=(0, 1))
         st.pyplot(g)
         
