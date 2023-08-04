@@ -24,6 +24,4 @@ st.markdown(
 """
 )
 
-st.sidebar.success("")
-
 
