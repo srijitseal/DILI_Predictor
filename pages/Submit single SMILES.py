@@ -410,13 +410,15 @@ def main():
                     mime='text/csv',
                 )
 
+                SHAP = convert_df(SHAP)
+                
                 with col2:
                     st.download_button(
                     label="Download proxy-DILI predictions as CSV",
                     data=SHAP,
                     file_name='SHAP.csv',
                     mime='text/csv',
-                )
+                    )
                 
                 st.success("Complete")
             
