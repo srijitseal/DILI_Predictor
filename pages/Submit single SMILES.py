@@ -290,7 +290,7 @@ def main():
         
         
     info = pd.DataFrame({"name": liv_data, "source": source, "assaytype": assaytype})
-    SHAP =pd.DataFrame(columns=['name', 'source', 'assaytype', 'SHAP', 'description', 'value', 'pred','influence', 'smiles'])
+    SHAP =pd.DataFrame(columns=['name', 'source', 'assaytype', 'SHAP', 'description', 'value', 'pred'])
     
     smiles=st.text_input("Enter SMILES")
     
@@ -336,7 +336,6 @@ def main():
                 proxy_DILI_SHAP_top = pd.merge(info, top[top["name"].isin(liv_data)])
                 proxy_DILI_SHAP_top["pred"] = proxy_DILI_SHAP_top["value"]>0.50
                 proxy_DILI_SHAP_top["SHAP contribution to Toxicity"] = "Positive"
-                proxy_DILI_SHAP_top["smiles"] = smiles_r
                 
                 top_positives = top[top["value"]==1]
                 top_MACCS= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
@@ -349,7 +348,6 @@ def main():
                 proxy_DILI_SHAP_bottom = pd.merge(info, bottom[bottom["name"].isin(liv_data)])
                 proxy_DILI_SHAP_bottom["pred"] = proxy_DILI_SHAP_bottom["value"]>0.50
                 proxy_DILI_SHAP_bottom["SHAP contribution to Toxicity"] = "Negative"
-                proxy_DILI_SHAP_bottom["smiles"] = smiles_r
                 
                 bottom_positives = bottom[bottom["value"]==1]
                 bottom_MACCS= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
@@ -410,6 +408,7 @@ def main():
                     mime='text/csv',
                 )
 
+                SHAP=SHAP[["source", "assaytype", "description", "value", "pred", "SHAP contribution to Toxicity", "SHAP"]]
                 SHAP = convert_df(SHAP)
                 
                 with col1:
