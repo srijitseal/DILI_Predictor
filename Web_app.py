@@ -253,7 +253,7 @@ def main():
     )
     
     st.image("Logo.png", width=350)
-    #st.title("DILI PRedictor")
+    st.title("DILI Predictor")
     st.write(
     """
     [![Follow](https://img.shields.io/twitter/follow/srijitseal?style=social)](https://www.twitter.com/srijitseal)
