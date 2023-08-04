@@ -335,8 +335,7 @@ def main():
         top_MACCS_shap= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0] 
         top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
         
-        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
-        st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
+        
                      
                  
         st.write("Most contributing MACCS substructure to DILI safety")
@@ -351,14 +350,9 @@ def main():
         bottom_MACCS_value= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
         bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
         bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
-                 
-                                  
-        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
-        st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
         
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
         SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
-    
         #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
         sns.set_style('white')
         sns.set_context('paper', font_scale=2)
@@ -371,8 +365,13 @@ def main():
         g.set(ylabel=None)
         g.set(xlabel=None)
         g.set(ylim=(0, 1))
-        
         st.pyplot(g)
+        
+        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
+        st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
+        
+        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
+        st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
         
         st.success(1)
 
