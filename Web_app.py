@@ -383,6 +383,7 @@ def main():
                 
                 
                 with col2:
+                    st.write("Labels from proxy-DILI predictions that are positively and negatively contributing to the DILI prediction")
                     st.pyplot(g)
                 
                 st.success("Complete")
