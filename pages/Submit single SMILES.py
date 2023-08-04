@@ -389,13 +389,7 @@ def main():
 
                 #Dowload Predictions
 
-                preds_dict_download = {
-
-                'smiles':[smiles],
-                'smiles_r':[smiles_r],
-                'DILI_Predicted_Probability':[y_proba[0]],   
-                'DILI_Predicted':[y_pred[0]],   
-                }
+                
                     
                 preds_dict_download = pd.DataFrame(preds_dict_download)
                 preds_dict_download = convert_df(preds_dict_download)
@@ -408,12 +402,26 @@ def main():
                     mime='text/csv',
                 )
 
+                preds_DILI = {
+
+                "source": ["DILI"], 
+                "assaytype": ["DILIist_FDA"], 
+                "description": ["This is the predicted FDA DILIst label"], 
+                "value": [y_proba[0]], 
+                "pred": [y_pred[0]], 
+                "SHAP contribution to Toxicity": ["N/A"], 
+                "SHAP": ["N/A"]
+                }
+                
                 SHAP=SHAP[["source", "assaytype", "description", "value", "pred", "SHAP contribution to Toxicity", "SHAP"]]
+                SHAP = pd.concat([new_row, SHAP]).reset_index(drop=True)
+                SHAP["smiles"] = smiles
+                SHAP["smiles_r"] = smiles_r
                 SHAP = convert_df(SHAP)
                 
                 with col1:
                     st.download_button(
-                    label="Download proxy-DILI predictions as CSV",
+                    label="Download DILI and proxy-DILI predictions as CSV",
                     data=SHAP,
                     file_name='SHAP.csv',
                     mime='text/csv',
