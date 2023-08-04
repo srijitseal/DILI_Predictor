@@ -389,21 +389,7 @@ def main():
 
                 #Dowload Predictions
 
-                
-                    
-                preds_dict_download = pd.DataFrame(preds_dict_download)
-                preds_dict_download = convert_df(preds_dict_download)
-                
-                with col1:
-                    st.download_button(
-                    label="Download DILI prediction as CSV",
-                    data=preds_dict_download,
-                    file_name='DILI_Predictions.csv',
-                    mime='text/csv',
-                )
-
                 preds_DILI = pd.DataFrame({
-
                 "source": ["DILI"], 
                 "assaytype": ["DILIist_FDA"], 
                 "description": ["This is the predicted FDA DILIst label"], 
