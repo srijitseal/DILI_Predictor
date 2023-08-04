@@ -40,7 +40,7 @@ st.markdown("---")
 
 left_col, right_col = st.columns(2)
 
-right_col.image("logo_bottom.png")
+right_col.image("Logo.png")
 
 left_col.markdown(
         """
