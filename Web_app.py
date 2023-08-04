@@ -290,11 +290,7 @@ def main():
     info = pd.DataFrame({"name": liv_data, "source": source, "assaytype": assaytype})
     SHAP =pd.DataFrame(columns=['name', 'source', 'assaytype', 'SHAP', 'description', 'value', 'pred','influence', 'smiles'])
     
-    smile=st.text_input("Enter SMILES")
-    smiles = unquote(smile)
-    smiles_r = standardized_smiles(smiles)
-    test = {'smiles_r':  [smiles_r] }
-    test = pd.DataFrame(test)
+    smiles=st.text_input("Enter SMILES")
     
     #predict
     y_pred = ''
@@ -303,84 +299,104 @@ def main():
     if st.button('Predict DILI'):
         
         with st.spinner('Calculating...'):
-            
-            molecule = Chem.MolFromSmiles(smiles_r)     
-            st.image(Draw.MolToImage(molecule), width=200)
-                    
-            test_mfp_Mordred = calc_all_fp_desc(test)
-            test_mfp_Mordred_liv = predict_liv_all(test_mfp_Mordred)
-            test_mfp_Mordred_liv_values = test_mfp_Mordred_liv.T.reset_index().rename(columns={"index":"name", 0: "value"})
-    
-            interpret, y_proba, y_pred = predict_DILI(test_mfp_Mordred_liv)   
-            interpret = pd.merge(interpret, desc, right_on="name", left_on="name", how="outer")
-            interpret = pd.merge(interpret, test_mfp_Mordred_liv_values, right_on="name", left_on="name", how="inner") 
-    
-            print(y_proba[0])
-            print(y_pred[0]) 
-            
-            if(y_pred[0]==1):
-                st.write("The compound is predicted DILI-Positive")
-            if(y_pred[0]==0):
-                st.write("The compound is predicted DILI-Negative")
-    
-            
-            top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False)
-            proxy_DILI_SHAP_top = pd.merge(info, top[top["name"].isin(liv_data)])
-            proxy_DILI_SHAP_top["pred"] = proxy_DILI_SHAP_top["value"]>0.50
-            proxy_DILI_SHAP_top["SHAP contribution to Toxicity"] = "Positive"
-            proxy_DILI_SHAP_top["smiles"] = smiles_r
-            
-            top_positives = top[top["value"]==1]
-            top_MACCS= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
-            top_MACCS_value= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
-            top_MACCS_shap= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0] 
-            top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
-           
-           
-            bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True)
-            proxy_DILI_SHAP_bottom = pd.merge(info, bottom[bottom["name"].isin(liv_data)])
-            proxy_DILI_SHAP_bottom["pred"] = proxy_DILI_SHAP_bottom["value"]>0.50
-            proxy_DILI_SHAP_bottom["SHAP contribution to Toxicity"] = "Negative"
-            proxy_DILI_SHAP_bottom["smiles"] = smiles_r
-            
-            bottom_positives = bottom[bottom["value"]==1]
-            bottom_MACCS= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
-            bottom_MACCS_value= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
-            bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
-            bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.write("Most contributing MACCS substructure to DILI toxicity")
-            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
-            st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
-            
-            st.write("Most contributing MACCS substructure to DILI safety")
-            st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
-            st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
+            if(smiles==''):
+                st.write("No input provided")
+                st.success("Fail!")
+                st.stop()
 
-        SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
-        SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
-        SHAP["name"] = SHAP["name"].astype(int)
-        SHAP = SHAP.sort_values(by=["name"], ascending=True)
-        #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
-        #sns.set_style('white')
-        #sns.set_context('paper', font_scale=2)
-        hue_order = ['Positive', 'Negative']
-        g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
-                        palette="Greys", dodge=False, legend=True,
-                        height=5, aspect=2)
-        g.set_xticklabels(rotation=90)
-        g.set(ylabel=None)
-        g.set(xlabel="Predicted Probability")
-        g.set(ylim=(0, 1))
+            try:
+                smiles = unquote(smiles)
+                smiles_r = standardized_smiles(smiles)
+                test = {'smiles_r':  [smiles_r] }
+                test = pd.DataFrame(test)
+                molecule = Chem.MolFromSmiles(smiles_r)     
+                st.image(Draw.MolToImage(molecule), width=200)
+                        
+                test_mfp_Mordred = calc_all_fp_desc(test)
+                test_mfp_Mordred_liv = predict_liv_all(test_mfp_Mordred)
+                test_mfp_Mordred_liv_values = test_mfp_Mordred_liv.T.reset_index().rename(columns={"index":"name", 0: "value"})
         
+                interpret, y_proba, y_pred = predict_DILI(test_mfp_Mordred_liv)   
+                interpret = pd.merge(interpret, desc, right_on="name", left_on="name", how="outer")
+                interpret = pd.merge(interpret, test_mfp_Mordred_liv_values, right_on="name", left_on="name", how="inner") 
         
-        with col2:
-            st.pyplot(g)
+                print(y_proba[0])
+                print(y_pred[0]) 
+                
+                if(y_pred[0]==1):
+                    st.write("The compound is predicted DILI-Positive")
+                if(y_pred[0]==0):
+                    st.write("The compound is predicted DILI-Negative")
         
-        st.success(1)
+                
+                top = interpret[interpret["SHAP"]>0].sort_values(by=["SHAP"], ascending=False)
+                proxy_DILI_SHAP_top = pd.merge(info, top[top["name"].isin(liv_data)])
+                proxy_DILI_SHAP_top["pred"] = proxy_DILI_SHAP_top["value"]>0.50
+                proxy_DILI_SHAP_top["SHAP contribution to Toxicity"] = "Positive"
+                proxy_DILI_SHAP_top["smiles"] = smiles_r
+                
+                top_positives = top[top["value"]==1]
+                top_MACCS= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
+                top_MACCS_value= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
+                top_MACCS_shap= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0] 
+                top_MACCSsubstructure = Chem.MolFromSmarts(top_MACCS)
+               
+               
+                bottom = interpret[interpret["SHAP"]<0].sort_values(by=["SHAP"], ascending=True)
+                proxy_DILI_SHAP_bottom = pd.merge(info, bottom[bottom["name"].isin(liv_data)])
+                proxy_DILI_SHAP_bottom["pred"] = proxy_DILI_SHAP_bottom["value"]>0.50
+                proxy_DILI_SHAP_bottom["SHAP contribution to Toxicity"] = "Negative"
+                proxy_DILI_SHAP_bottom["smiles"] = smiles_r
+                
+                bottom_positives = bottom[bottom["value"]==1]
+                bottom_MACCS= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
+                bottom_MACCS_value= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
+                bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
+                bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("Most contributing MACCS substructure to DILI toxicity")
+                st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
+                st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
+                
+                st.write("Most contributing MACCS substructure to DILI safety")
+                st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
+                st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
+    
+            SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
+            SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
+            SHAP["name"] = SHAP["name"].astype(int)
+            SHAP = SHAP.sort_values(by=["name"], ascending=True)
+            #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
+            #sns.set_style('white')
+            #sns.set_context('paper', font_scale=2)
+            hue_order = ['Positive', 'Negative']
+            g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
+                            palette="Greys", dodge=False, legend=True,
+                            height=5, aspect=2)
+            g.set_xticklabels(rotation=90)
+            g.set(xlabel=None)
+            g.set(ylabel="Predicted Probability")
+            g.set(ylim=(0, 1))
+            
+            
+            with col2:
+                st.pyplot(g)
+            
+            st.success("Complete")
+            
+        except:
+                
+                if (smiles==' '):
+                    st.write(f"Empty SMILES : Unsuccessful!")
+                    
+                else:
+                    st.write(f"{smiles} Unsuccessful! Check SMILES")
+                
+                st.success("Unsuccessful")
+    
 
 if __name__ == '__main__': 
     main()   
