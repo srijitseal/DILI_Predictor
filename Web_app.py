@@ -356,39 +356,38 @@ def main():
                 bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
                 bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
             
-            with col1:
-                st.write("Most contributing MACCS substructure to DILI toxicity")
-                st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
-                st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
+                with col1:
+                    st.write("Most contributing MACCS substructure to DILI toxicity")
+                    st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=400))        
+                    st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to prediction")
+                    
+                    st.write("Most contributing MACCS substructure to DILI safety")
+                    st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
+                    st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
+        
+                SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
+                SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
+                SHAP["name"] = SHAP["name"].astype(int)
+                SHAP = SHAP.sort_values(by=["name"], ascending=True)
+                #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
+                #sns.set_style('white')
+                #sns.set_context('paper', font_scale=2)
+                hue_order = ['Positive', 'Negative']
+                g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
+                                palette="Greys", dodge=False, legend=True,
+                                height=5, aspect=2)
+                g.set_xticklabels(rotation=90)
+                g.set(xlabel=None)
+                g.set(ylabel="Predicted Probability")
+                g.set(ylim=(0, 1))
                 
-                st.write("Most contributing MACCS substructure to DILI safety")
-                st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=400))  
-                st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to prediction")
-    
-            SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
-            SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
-            SHAP["name"] = SHAP["name"].astype(int)
-            SHAP = SHAP.sort_values(by=["name"], ascending=True)
-            #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
-            #sns.set_style('white')
-            #sns.set_context('paper', font_scale=2)
-            hue_order = ['Positive', 'Negative']
-            g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
-                            palette="Greys", dodge=False, legend=True,
-                            height=5, aspect=2)
-            g.set_xticklabels(rotation=90)
-            g.set(xlabel=None)
-            g.set(ylabel="Predicted Probability")
-            g.set(ylim=(0, 1))
-            
-            
-            with col2:
-                st.pyplot(g)
-            
-            st.success("Complete")
-            
-        except:
                 
+                with col2:
+                    st.pyplot(g)
+                
+                st.success("Complete")
+            
+        except: 
                 if (smiles==' '):
                     st.write(f"Empty SMILES : Unsuccessful!")
                     
@@ -396,7 +395,6 @@ def main():
                     st.write(f"{smiles} Unsuccessful! Check SMILES")
                 
                 st.success("Unsuccessful")
-    
 
 if __name__ == '__main__': 
     main()   
