@@ -387,14 +387,14 @@ def main():
                 
                 st.success("Complete")
             
-        except: 
-                if (smiles==' '):
-                    st.write(f"Empty SMILES : Unsuccessful!")
+            except: 
+                    if (smiles==' '):
+                        st.write(f"Empty SMILES : Unsuccessful!")
+                        
+                    else:
+                        st.write(f"{smiles} Unsuccessful! Check SMILES")
                     
-                else:
-                    st.write(f"{smiles} Unsuccessful! Check SMILES")
-                
-                st.success("Unsuccessful")
+                    st.success("Unsuccessful")
 
 if __name__ == '__main__': 
     main()   
