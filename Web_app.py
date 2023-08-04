@@ -296,6 +296,8 @@ def main():
     y_pred = ''
     y_proba = ''
     
+    col1, col2 = st.columns(2)
+    
     if st.button('Predict DILI'):
         
         with st.spinner('Calculating...'):
@@ -353,8 +355,6 @@ def main():
                 bottom_MACCS_value= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["value"].values[0]
                 bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
                 bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
-            
-            col1, col2 = st.columns(2)
             
             with col1:
                 st.write("Most contributing MACCS substructure to DILI toxicity")
