@@ -323,9 +323,7 @@ def main():
 
             try:
                 smiles = unquote(smiles)
-                print(smiles)
                 smiles_r = standardized_smiles(smiles)
-                print(smiles_r)
                 test = {'smiles_r':  [smiles_r]
                             }
                 test = pd.DataFrame(test)
@@ -341,8 +339,6 @@ def main():
                 interpret = pd.merge(interpret, desc, right_on="name", left_on="name", how="outer")
                 interpret = pd.merge(interpret, test_mfp_Mordred_liv_values, right_on="name", left_on="name", how="inner") 
         
-                print(y_proba[0])
-                print(y_pred[0]) 
                 
                 if(y_pred[0]==1):
                     st.subheader("The compound is predicted **_DILI-Positive_**")
@@ -377,7 +373,6 @@ def main():
             
                 st.write("unbound Cmax: ", np.round(10**-test_mfp_Mordred_liv["median pMolar unbound plasma concentration"][0] *10**6, 2), "uM")
                 st.write("total Cmax: ", np.round(10**-test_mfp_Mordred_liv["median pMolar total plasma concentration"][0] *10**6, 2), "uM")
-                st.write("Most contributing MACCS substructure to DILI toxicity")
                 
                 col1, col2 = st.columns(2)
                 
@@ -385,13 +380,11 @@ def main():
                     if(y_pred[0]==1):
                         st.subheader("Most contributing MACCS substructure to :red[DILI toxicity]")
                         st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=600))        
-                        st.write(top_MACCS)
                         st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to toxicity")
                     
                     if(y_pred[0]==0):
                         st.subheader("Most contributing MACCS substructure to :blue[DILI safety]")
                         st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=600))  
-                        st.write(bottom_MACCS)
                         st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to safety")
         
                 SHAP =pd.DataFrame(columns=['name', 'source', 'assaytype', 'SHAP', 'description', 'value', 'pred', 'smiles'])
