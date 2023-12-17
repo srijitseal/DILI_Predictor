@@ -321,8 +321,7 @@ def main():
                 st.success("Fail!")
                 st.stop()
 
-            #try:
-            if(1):
+            try:
                 smiles = unquote(smiles)
                 print(smiles)
                 smiles_r = standardized_smiles(smiles)
@@ -383,15 +382,17 @@ def main():
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.subheader("Most contributing MACCS substructure to :red[DILI toxicity]")
-                    st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=600))        
-                    st.write(top_MACCS)
-                    st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to toxicity")
+                    if(y_pred[0]==1):
+                        st.subheader("Most contributing MACCS substructure to :red[DILI toxicity]")
+                        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(top_MACCSsubstructure), width=600))        
+                        st.write(top_MACCS)
+                        st.write("Presence of this substructure contributes", np.round(top_MACCS_shap, 4), "to toxicity")
                     
-                    st.subheader("Most contributing MACCS substructure to :blue[DILI safety]")
-                    st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=600))  
-                    st.write(bottom_MACCS)
-                    st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to safety")
+                    if(y_pred[0]==0):
+                        st.subheader("Most contributing MACCS substructure to :blue[DILI safety]")
+                        st.image(Draw.MolToImage(molecule, highlightAtoms=molecule.GetSubstructMatch(bottom_MACCSsubstructure), width=600))  
+                        st.write(bottom_MACCS)
+                        st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to safety")
         
                 SHAP =pd.DataFrame(columns=['name', 'source', 'assaytype', 'SHAP', 'description', 'value', 'pred', 'smiles'])
                 SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
@@ -411,7 +412,7 @@ def main():
                 g.set(ylim=(0, 1))
                 
                 with col2:
-                    st.header("Proxy-DILI predictions and PK parameter model predictions that are positively and negatively contributing to the DILI prediction")
+                    st.header("Proxy-DILI predictions that are positively and negatively contributing to the DILI prediction")
                     st.pyplot(g)
 
                 #Dowload Predictions
@@ -445,8 +446,7 @@ def main():
                 
                 st.success("Complete")
             
-            #except: 
-            if(1):
+            except: 
                     if (smiles==' '):
                         st.write(f"Empty SMILES : Unsuccessful!")
                         
