@@ -29,9 +29,7 @@ from rdkit.Chem import Draw
 from rdkit.Chem.Draw import rdMolDraw2D
 from rdkit.Chem.Draw import MolDraw2DSVG
 
-from bokeh.plotting import ColumnDataSource, figure, output_file, show
 from sklearn.decomposition import PCA
-from bokeh.io import output_notebook
 
 from molvs import standardize_smiles
 import pandas as pd
