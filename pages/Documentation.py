@@ -22,7 +22,7 @@ st.markdown(
     All our data and models are publicly available at GitHub and further details are published at bioRxiv.
 """
 )
-st.image("Schema.png")
+st.image("schema.png")
 st.image("Flowchart.png")
 
 
