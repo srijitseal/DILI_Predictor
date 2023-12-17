@@ -33,7 +33,7 @@ st.markdown(
     For bulk jobs, or local use: use code from Github page: https://github.com/srijitseal/DILI_Predictor
     
     ### Want to learn more?
-    - Check out our paper at [bioarxiv](Appearing here soon!)
+    - Check out our paper at [bioRxiv](Appearing here soon!)
     """
 )
 st.markdown("---")
