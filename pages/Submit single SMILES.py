@@ -410,7 +410,7 @@ def main():
 
                 preds_DILI = pd.DataFrame({
                 "source": ["DILI"], 
-                "assaytype": ["DILIist_FDA"], 
+                "assaytype": ["DILIst_FDA"], 
                 "description": ["This is the predicted FDA DILIst label"], 
                 "value": [y_proba[0]], 
                 "pred": [y_pred[0]], 
