@@ -157,10 +157,8 @@ def calc_all_fp_desc(data):
     a=calc_descriptors(data)
     descdf=pd.DataFrame(a, columns=descs)
     descdf_approved=descdf.reset_index(drop=True)
-    descdf_approved
     
     tox_model_data= pd.concat([data, Morgan_fingerprint_table, MACCSfingerprint_table, descdf_approved, Mordred_table], axis=1)
-    tox_model_data
     
     return(tox_model_data)
     
