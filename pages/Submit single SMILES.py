@@ -331,9 +331,6 @@ def main():
                             }
                 test = pd.DataFrame(test)
         
-                desc=pd.read_csv("all_features_desc.csv", encoding='windows-1252')
-        
-        
                 molecule = Chem.MolFromSmiles(smiles_r)     
                 #st.image(Draw.MolToImage(molecule), width=200)
                         
