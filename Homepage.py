@@ -10,8 +10,8 @@ st.set_page_config(
 left_col, right_col = st.columns(2)
 
 right_col.write("# Welcome to DILI Predictor")
-right_col.write("v1.1.3")
-right_col.write("Created by Srijit Seal, Ola Spjuth and Andreas Bender")
+right_col.write("v2.1.0")
+right_col.write("Created by Srijit Seal, Dominic Williams, Ola Spjuth and Andreas Bender")
 left_col.image("Logo.png")
 
 
@@ -26,14 +26,14 @@ st.markdown(
     DILI Predictor employs eleven proxy-DILI labels from in vitro 
     (e.g., mitochondrial toxicity, bile salt export pump inhibition) 
     and in vivo (e.g., preclinical rat hepatotoxicity studies) 
-    datasets along with structural fingerprints and physicochemical 
+    datasets along with pharmacokinetic parameters, structural fingerprints and physicochemical 
     parameters as features.
     
     Select from the sidebar to predict DILI for a single molecule!
     For bulk jobs, or local use: use code from Github page: https://github.com/srijitseal/DILI_Predictor
     
     ### Want to learn more?
-    - Check out our paper at [bioarxiv](https://streamlit.io)
+    - Check out our paper at [bioarxiv](Appearing here soon!)
     """
 )
 st.markdown("---")
@@ -49,7 +49,7 @@ left_col.markdown(
         the following pages in the PK Predictor application:
         - **Home Page:** You are here!
         - **Documentation:** Explains how the algorithm works and the overview of the models
-        - **Submit single SMILES:** You can enter the smiles of the query compound here to obtain a detailed analysis of the predicted DILI and also proxy-DILI labels used by the model.
+        - **Submit single SMILES:** You can enter the smiles of the query compound here to obtain a detailed analysis of the predicted DILI and predicitons for proxy-DILI labels and PK parameters used by the model.
         """
     )
 st.markdown("---")
@@ -63,7 +63,7 @@ left_info_col.markdown(
         ### Authors
         
         ##### Srijit Seal 
-        - Email:  <ss2686@cam.ac.uk>
+        - Email:  <seal@broadinstitute.org>
         - GitHub: https://github.com/srijitseal
         ##### Andreas Bender
         - Email: <ab454@cam.ac.uk>
