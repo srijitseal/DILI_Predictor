@@ -23,4 +23,6 @@ st.markdown(
 """
 )
 
+st.image("Flowchart.png")
+
 
