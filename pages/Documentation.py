@@ -17,9 +17,9 @@ st.markdown(
     
     DILI Predictor employs eleven proxy-DILI labels from in vitro (e.g., mitochondrial toxicity, bile 
     salt export pump inhibition) and in vivo (e.g., preclinical rat hepatotoxicity studies) datasets 
-    along with structural fingerprints and physicochemical parameters as features.
+    along with pharmacokinetic properties, structural fingerprints, and physicochemical parameters as features.
     
-    All our data and models are publicly available at GitHub and further details are published at bioaRxiv.
+    All our data and models are publicly available at GitHub and further details are published at bioRxiv.
 """
 )
 
