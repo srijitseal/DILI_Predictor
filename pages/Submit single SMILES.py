@@ -5,7 +5,7 @@ import streamlit as st
 from typing import Union
 from urllib.parse import unquote, quote
 import matplotlib.pyplot as plt
-
+import seaborn as sns
 import numpy as np
 import pandas as pd
 from rdkit import Chem
