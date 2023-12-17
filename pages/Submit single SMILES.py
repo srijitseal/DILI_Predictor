@@ -169,7 +169,7 @@ liv_data = [ "2",  "3",  "5",  "6",  "7",  "8",   "10", "11", "14", "15", "16"]
 
 def predict_individual_liv_data(data_dummy, features, endpoint):#predict animal data
     
-    loaded_rf = pickle.load(open(f"bestlivmodel_{endpoint}_model.sav", 'rb'))
+    loaded_rf = pickle.load(open(f"models/bestlivmodel_{endpoint}_model.sav", 'rb'))
     X = data_dummy[features]
     X = X.values
     y_proba =  loaded_rf.predict_proba(X)[:,1]  
@@ -178,7 +178,7 @@ def predict_individual_liv_data(data_dummy, features, endpoint):#predict animal 
 
 def predict_individual_cmax_data(data_dummy, features, endpoint):#predict animal data
     
-    regressor = pickle.load(open(f"bestlivmodel_{endpoint}_model.sav", 'rb'))
+    regressor = pickle.load(open(f"models/bestlivmodel_{endpoint}_model.sav", 'rb'))
 
     X = data_dummy[features]
     X = X.values
@@ -189,7 +189,7 @@ def predict_individual_cmax_data(data_dummy, features, endpoint):#predict animal
 
 def predict_liv_all(data):
     #Read columns needed for rat data
-    file = open(f"./features_morgan_mordred_maccs_physc.txt", "r")
+    file = open(f"./features/features_morgan_mordred_maccs_physc.txt", "r")
     file_lines = file.read()
     features = file_lines.split("\n")
     features = features[:-1]
@@ -212,13 +212,13 @@ def predict_liv_all(data):
 def predict_DILI(data):#log human_VDss_L_kg model
     
     #Read columns needed for rat data
-    file = open(f"./features_morgan_mordred_maccs_physc.txt", "r")
+    file = open(f"./features/features_morgan_mordred_maccs_physc.txt", "r")
     file_lines = file.read()
     features = file_lines.split("\n")
     features = features[:-1]
     
     features = list(features) + ["median pMolar unbound plasma concentration", "median pMolar total plasma concentration"] + list(liv_data) 
-    loaded_rf = pickle.load(open("./final_dili_model.sav", 'rb'))
+    loaded_rf = pickle.load(open("./models/final_dili_model.sav", 'rb'))
     #Note this mode was trained on all data before releasing (not just ncv data)
 
     X = data[features]
