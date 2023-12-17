@@ -5,8 +5,7 @@ import streamlit as st
 from typing import Union
 from urllib.parse import unquote, quote
 import matplotlib.pyplot as plt
-import seaborn as sns
-import shap
+
 import numpy as np
 import pandas as pd
 from rdkit import Chem
@@ -27,15 +26,20 @@ from rdkit import Chem
 from rdkit import RDPaths
 from rdkit.Chem.Draw import IPythonConsole
 from rdkit.Chem import Draw
-from rdkit.Chem.Draw import rdMolDraw2D, MolToImage
+from rdkit.Chem.Draw import rdMolDraw2D
 from rdkit.Chem.Draw import MolDraw2DSVG
+
+from bokeh.plotting import ColumnDataSource, figure, output_file, show
 from sklearn.decomposition import PCA
+from bokeh.io import output_notebook
+
 from molvs import standardize_smiles
 import pandas as pd
 from rdkit.Chem import inchi
 from rdkit import Chem
 
-
+import shap
+shap.initjs()
 
 def standardized_smiles(value):
     #print(value)
@@ -129,7 +133,7 @@ descs = [ 'PSA', 'n_rot_bonds', 'n_rings', 'n_ar_rings',
 def calc_all_fp_desc(data):
    
     calc = Calculator(descriptors, ignore_3D=True)
-    #print(len(calc.descriptors))
+    print(len(calc.descriptors))
     Ser_Mol = data['smiles_r'].apply(Chem.MolFromSmiles)
     # as pandas
     Mordred_table=  calc.pandas(Ser_Mol)
@@ -155,10 +159,10 @@ def calc_all_fp_desc(data):
     a=calc_descriptors(data)
     descdf=pd.DataFrame(a, columns=descs)
     descdf_approved=descdf.reset_index(drop=True)
-    #descdf_approved
+    descdf_approved
     
     tox_model_data= pd.concat([data, Morgan_fingerprint_table, MACCSfingerprint_table, descdf_approved, Mordred_table], axis=1)
-    #tox_model_data
+    tox_model_data
     
     return(tox_model_data)
     
@@ -167,20 +171,27 @@ liv_data = [ "2",  "3",  "5",  "6",  "7",  "8",   "10", "11", "14", "15", "16"]
 
 def predict_individual_liv_data(data_dummy, features, endpoint):#predict animal data
     
-    
-
-    loaded_rf = pickle.load(open(f"./models/bestlivmodel_{endpoint}_model.sav", 'rb'))
-
+    loaded_rf = pickle.load(open(f"bestlivmodel_{endpoint}_model.sav", 'rb'))
     X = data_dummy[features]
     X = X.values
-    
     y_proba =  loaded_rf.predict_proba(X)[:,1]  
     
     return(y_proba)
 
+def predict_individual_cmax_data(data_dummy, features, endpoint):#predict animal data
+    
+    regressor = pickle.load(open(f"bestlivmodel_{endpoint}_model.sav", 'rb'))
+
+    X = data_dummy[features]
+    X = X.values
+    #Add predictions to held out test set dili
+    y_pred = regressor.predict(X)
+    
+    return(y_pred)
+
 def predict_liv_all(data):
     #Read columns needed for rat data
-    file = open(f"./features/features_morgan_mordred_maccs_physc.txt", "r")
+    file = open(f"./features_morgan_mordred_maccs_physc.txt", "r")
     file_lines = file.read()
     features = file_lines.split("\n")
     features = features[:-1]
@@ -191,6 +202,11 @@ def predict_liv_all(data):
         #print(endpoint)
         y_proba = predict_individual_liv_data(data_dummy, features, endpoint) 
         data[endpoint] = y_proba
+        
+    for endpoint in ["median pMolar unbound plasma concentration" ,
+               "median pMolar total plasma concentration"]:
+        y_proba = predict_individual_cmax_data(data_dummy, features, endpoint) 
+        data[endpoint] = y_proba
     
     return(data)
 
@@ -198,18 +214,19 @@ def predict_liv_all(data):
 def predict_DILI(data):#log human_VDss_L_kg model
     
     #Read columns needed for rat data
-    file = open(f"./features/features_morgan_mordred_maccs_physc.txt", "r")
+    file = open(f"./features_morgan_mordred_maccs_physc.txt", "r")
     file_lines = file.read()
     features = file_lines.split("\n")
     features = features[:-1]
     
-    features = list(features) + list(liv_data)
-    loaded_rf = pickle.load(open("./models/final_dili_model.sav", 'rb'))
+    features = list(features) + ["median pMolar unbound plasma concentration", "median pMolar total plasma concentration"] + list(liv_data) 
+    loaded_rf = pickle.load(open("./final_dili_model.sav", 'rb'))
+    #Note this mode was trained on all data before releasing (not just ncv data)
 
     X = data[features]
     y_proba =  loaded_rf.predict_proba(X)[:,1]
-    best_thresh = 0.622537
-    #print('Best Threshold=%f' % (best_thresh))
+    best_thresh = 0.612911
+    print('Best Threshold=%f' % (best_thresh))
     
     y_pred  = [ 1 if y_proba>best_thresh  else 0] 
     
@@ -228,10 +245,9 @@ def predict_DILI(data):#log human_VDss_L_kg model
     interpret["name"] = features
     interpret["SHAP"] = flat_shaplist#print(flat_shaplist)
     plt.show()
-    # 
+    # Explaining the 4th instance
 
     return(interpret, y_proba, y_pred)
-    #return(y_proba, y_pred)
 
 
 def mol2svg(mol):
@@ -264,29 +280,29 @@ def main():
     
     desc=pd.read_csv("./features/all_features_desc.csv", encoding='windows-1252')
     source = ["Liver Toxicity Knowledge Base",
-        "Human hepatotoxicity",
-        "Animal hepatotoxicity A",
-        "Animal hepatotoxicity B",
-        "Preclinical hepatotoxicity",
-        "Diverse DILI A",
-        "Diverse DILI B",
-        "Diverse DILI C",
-        "BESP",
-        "Mitotox",
-        "Reactive Metabolite"]
+            "Human hepatotoxicity",
+            "Animal hepatotoxicity A",
+            "Animal hepatotoxicity B",
+            "Preclinical hepatotoxicity",
+            "Diverse DILI A",
+            "Diverse DILI B",
+            "Diverse DILI C",
+            "BESP",
+            "Mitotox",
+            "Reactive Metabolite"]
         
         
     assaytype = ["DILI",
-        "Human hepatotoxicity",
-        "Animal hepatotoxicity",
-        "Animal hepatotoxicity",
-        "Animal hepatotoxicity",
-        "Heterogenous Data ",
-        "Heterogenous Data ",
-        "Heterogenous Data ",
-        "Mechanisms of Liver Toxicity",
-        "Mechanisms of Liver Toxicity",
-        "Mechanisms of Liver Toxicity"]
+                "Human hepatotoxicity",
+                "Animal hepatotoxicity",
+                "Animal hepatotoxicity",
+                "Animal hepatotoxicity",
+                "Heterogenous Data ",
+                "Heterogenous Data ",
+                "Heterogenous Data ",
+                "Mechanisms of Liver Toxicity",
+                "Mechanisms of Liver Toxicity",
+                "Mechanisms of Liver Toxicity"]
         
         
     info = pd.DataFrame({"name": liv_data, "source": source, "assaytype": assaytype})
@@ -310,10 +326,15 @@ def main():
             try:
                 smiles = unquote(smiles)
                 smiles_r = standardized_smiles(smiles)
-                test = {'smiles_r':  [smiles_r] }
+                test = {'smiles_r':  [smiles_r]
+                            }
                 test = pd.DataFrame(test)
+        
+                desc=pd.read_csv("all_features_desc.csv", encoding='windows-1252')
+        
+        
                 molecule = Chem.MolFromSmiles(smiles_r)     
-                st.image(Draw.MolToImage(molecule), width=200)
+                #st.image(Draw.MolToImage(molecule), width=200)
                         
                 test_mfp_Mordred = calc_all_fp_desc(test)
                 test_mfp_Mordred_liv = predict_liv_all(test_mfp_Mordred)
@@ -336,6 +357,7 @@ def main():
                 proxy_DILI_SHAP_top = pd.merge(info, top[top["name"].isin(liv_data)])
                 proxy_DILI_SHAP_top["pred"] = proxy_DILI_SHAP_top["value"]>0.50
                 proxy_DILI_SHAP_top["SHAP contribution to Toxicity"] = "Positive"
+                proxy_DILI_SHAP_top["smiles"] = smiles_r
                 
                 top_positives = top[top["value"]==1]
                 top_MACCS= top_positives[top_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
@@ -348,6 +370,7 @@ def main():
                 proxy_DILI_SHAP_bottom = pd.merge(info, bottom[bottom["name"].isin(liv_data)])
                 proxy_DILI_SHAP_bottom["pred"] = proxy_DILI_SHAP_bottom["value"]>0.50
                 proxy_DILI_SHAP_bottom["SHAP contribution to Toxicity"] = "Negative"
+                proxy_DILI_SHAP_bottom["smiles"] = smiles_r
                 
                 bottom_positives = bottom[bottom["value"]==1]
                 bottom_MACCS= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["description"].values[0]
@@ -355,6 +378,10 @@ def main():
                 bottom_MACCS_shap= bottom_positives[bottom_positives.name.isin(desc.name.to_list()[-166:])].iloc[:1, :]["SHAP"].values[0]     
                 bottom_MACCSsubstructure = Chem.MolFromSmarts(bottom_MACCS)
             
+                st.write("unbound Cmax: ", np.round(10**-test_mfp_Mordred_liv["median pMolar unbound plasma concentration"][0] *10**6, 2), "uM")
+                st.write("total Cmax: ", np.round(10**-test_mfp_Mordred_liv["median pMolar total plasma concentration"][0] *10**6, 2), "uM")
+                st.write("Most contributing MACCS substructure to DILI toxicity")
+                
                 col1, col2 = st.columns(2)
                 
                 with col1:
@@ -368,25 +395,25 @@ def main():
                     st.write(bottom_MACCS)
                     st.write("Presence of this substructure contributes", np.round(bottom_MACCS_shap, 4), "to safety")
         
+                SHAP =pd.DataFrame(columns=['name', 'source', 'assaytype', 'SHAP', 'description', 'value', 'pred', 'smiles'])
                 SHAP = pd.concat([SHAP, proxy_DILI_SHAP_top])
                 SHAP = pd.concat([SHAP, proxy_DILI_SHAP_bottom])
-                SHAP["name"] = SHAP["name"].astype(int)
+                SHAP["name"] = SHAP["name"].astype(str)
                 SHAP = SHAP.sort_values(by=["name"], ascending=True)
                 #fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
                 sns.set_style('white')
                 sns.set_context('paper', font_scale=2)
                 hue_order = ['Positive', 'Negative']
-                g = sns.catplot(data=SHAP, x="source", y="value", kind="bar",hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
-                                palette="Greys", dodge=False, legend=True,
-                                height=5, aspect=2)
+                g = sns.catplot(data=SHAP, x="source", y="value", kind="bar", hue_order=hue_order,  hue="SHAP contribution to Toxicity",  
+                palette="Greys", height=5, aspect=2, dodge=False, legend=True)
+                #plt.axhline(y=0.5, color='r', linestyle='--')
                 g.set_xticklabels(rotation=90)
+                g.set(ylabel=None)
                 g.set(xlabel=None)
-                g.set(ylabel="Predicted Probability")
                 g.set(ylim=(0, 1))
                 
-                
                 with col2:
-                    st.header("Labels from proxy-DILI predictions that are positively and negatively contributing to the DILI prediction")
+                    st.header("Proxy-DILI predictions and PK parameter model predictions that are positively and negatively contributing to the DILI prediction")
                     st.pyplot(g)
 
                 #Dowload Predictions
