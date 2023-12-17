@@ -274,7 +274,7 @@ def main():
     """
     [![Follow](https://img.shields.io/twitter/follow/srijitseal?style=social)](https://www.twitter.com/srijitseal)
     """
-)
+    )
     
     desc=pd.read_csv("./features/all_features_desc.csv", encoding='windows-1252')
     source = ["Liver Toxicity Knowledge Base",
@@ -321,7 +321,8 @@ def main():
                 st.success("Fail!")
                 st.stop()
 
-            try:
+            #try:
+            if(1):
                 smiles = unquote(smiles)
                 print(smiles)
                 smiles_r = standardized_smiles(smiles)
@@ -447,7 +448,8 @@ def main():
                 
                 st.success("Complete")
             
-            except: 
+            #except: 
+            if(1):
                     if (smiles==' '):
                         st.write(f"Empty SMILES : Unsuccessful!")
                         
