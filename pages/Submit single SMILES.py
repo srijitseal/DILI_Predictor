@@ -323,7 +323,9 @@ def main():
 
             try:
                 smiles = unquote(smiles)
+                print(smiles)
                 smiles_r = standardized_smiles(smiles)
+                print(smiles_r)
                 test = {'smiles_r':  [smiles_r]
                             }
                 test = pd.DataFrame(test)
