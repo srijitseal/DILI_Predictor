@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DILI Predictor - About</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+   <nav class="navbar">
+        <div class="navbar-content">
+        <h1>DILI Predictor</h1>
+            <ul>
+                <li><a href="index.html">Welcome</a></li>
+		<li><a href="about.html">About</a></li>
+                <li><a href="datasets.html">Dataset</a></li>
+		<li><a href="predictor.html">Predictor</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+	    <a href="https://github.com/srijitseal/DILI_Predictor" target="_blank"> 
+			<img src="github.png" alt="github" width="100">  
+	    </a>
+
+	    <a href="https://www.biorxiv.org/content" target="_blank"> 
+			<img src="BioRxiv_logo.png" alt="bioaRxiv" width="100">  
+	    </a>
+        </div>
+    </nav>
+
+   
+ 
+
+<section class="content">
+
+     <div class="about-container">
+        <div class="about-title">
+            <h1> About </h1>
+        </div>
+
+        <div class="about-description">
+            <p> The DILIst dataset is a dataset for liver toxicity clinical labels. It is widely used in drug discovery as a benchmark for ML models on liver toxicity. 
+
+	    <p> Drug-induced liver injury (DILI) presents a significant challenge in drug discovery, often leading to clinical
+		trial failures and necessitating drug withdrawals. We introduce a novel method for DILI prediction that employs 		not only chemical data but also 11 predicted proxy-DILI labels (in vitro and in vivo data) and pharmacokinetic 		properties. These proxy-DILI labels offer complementary insights, enhancing prediction accuracy. 
+
+		<p>DILIPredictor  uses 11 predicted proxy-DILI labels, both in vitro (e.g., mitochondrial toxicity, bile salt 		export pump inhibition) and in vivo (e.g., preclinical rat hepatotoxicity studies) as well as pharmacokinetic 		parameters, structural fingerprints and physicochemical parameters for prediction.
+
+		<p>Utilising feature interpretation, DILIPredictor can recognize chemical structure as well as biological 		mechanisms, and distinguish animal vs human liver toxicity.
+
+		<p>DILIPredictor takes advantage of the diverse biological data related to DILI mechanisms as well as chemical 		structure for enhanced early detection.
+
+        	<p>For referencing DILI Predictor, please cite: <br>
+                <i>Seal et al. Enhancing Early Detection of Drug-Induced Liver Injury Through Predicted in vivo and in vitro 		Data Integration . bioRxiv [Coming Soon!].</i>
+        </p>
+
+        </div>
+    </div>
+
+    </section>
+
+ <section class="statistics">
+    <div class="stat">
+        <h2>~18,700</h2>
+        <p>compounds with liver toxicity readouts (DILI and proxy-DILI) covering comppunds and approved, investigational, 	experimental and withdrawn drugs</p>
+    </div>
+    <div class="stat">
+        <h2>13</h2>
+        <p> curated in vivo and in vitro assays (proxy-DILI labels) and pharmacokinetic parameters 
+	related to liver injury</p>
+    </div>
+    <div class="stat">
+        <h2>1275 </h2>
+        <p>compounds with DILI labels from DILIst and DILIrank labels (820 toxic and 455 non-toxic compounds). This dataset is  	referred to as the gold standard DILI dataset.</p>
+    </div>
+</section>
+
+
+<section class="content">
+
+     <div class="about-container">
+        <div class="about-description">
+ 		<img src="schema.png" alt="Schema Image" width="1000">
+        </div>
+
+    </div>
+
+    </section>
+    
+
+    <footer>
+       <h4>DILI Predictor is made from a joint effort from Andreas Bender's group at the University of Cambridge, Pharmbio at Uppsala University, and the Carpenter-Singh lab at the Broad Institute of MIT and Harvard. The original DILIst dataset released by US FDA can be found <a href="https://www.fda.gov/science-research/liver-toxicity-knowledge-base-ltkb/drug-induced-liver-injury-severity-and-toxicity-dilist-dataset" target="_blank"> here </a> </h4>
+    
+    
+   <a href="index.html"> <img src="Seal_project_logo.svg" alt="Seal_Logo" width="100"> </a>
+
+    
+   </footer>
+
+
+</body>
+
+</html>
