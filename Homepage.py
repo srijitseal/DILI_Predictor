@@ -30,10 +30,10 @@ st.markdown(
     parameters as features.
     
     Select from the sidebar to predict DILI for a single molecule!
-    For bulk jobs, or local use: use code from Github page: https://github.com/srijitseal/DILI_Predictor
+    For bulk jobs, or local use: use code from https://github.com/srijitseal/DILI/raw/main/local_implementation.zip
     
     ### Want to learn more?
-    - Check out our paper at [bioRxiv](Appearing here soon!)
+    - Check out our paper at https://pubs.acs.org/doi/10.1021/acs.jcim.3c01834
     """
 )
 st.markdown("---")
