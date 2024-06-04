@@ -39,10 +39,109 @@ from rdkit import Chem
 import shap
 shap.initjs()
 
-def standardized_smiles(value):
-    #print(value)
-    try: return standardize_smiles(value)
-    except: return "Cannot_do"
+from dimorphite_dl.dimorphite_dl import DimorphiteDL
+
+def standardized_smiles(smiles):
+    standardizer = Standardizer()
+    smiles_original = smiles
+
+    # Read SMILES and convert it to RDKit mol object
+    mol = Chem.MolFromSmiles(smiles)
+ 
+    try:
+        smiles_clean_counter = Counter()
+        mol_dict = {}
+        is_finalize = False
+
+        for _ in range(5):
+            
+            #This solved phosphate oxidation in most cases but introduces a problem for some compounds: eg. geldanamycin where the stable strcutre is returned
+            inchi_standardised = Chem.MolToInchi(mol)
+            mol = Chem.MolFromInchi(inchi_standardised)
+            
+            # removeHs, disconnect metal atoms, normalize the molecule, reionize the molecule
+            mol = rdMolStandardize.Cleanup(mol) 
+            # if many fragments, get the "parent" (the actual mol we are interested in) 
+            mol = rdMolStandardize.FragmentParent(mol)
+            # try to neutralize molecule
+            uncharger = rdMolStandardize.Uncharger() # annoying, but necessary as no convenience method exists
+            
+            mol = uncharger.uncharge(mol)# standardize molecules using MolVS and RDKit
+            mol = standardizer.charge_parent(mol)
+            mol = standardizer.isotope_parent(mol)
+            mol = standardizer.stereo_parent(mol)
+            
+            #Normalize tautomers 
+            #Method 1
+            normalizer = MolStandardize.tautomer.TautomerCanonicalizer()
+            mol = normalizer.canonicalize(mol)
+            
+            #Method 2
+            te = rdMolStandardize.TautomerEnumerator() # idem
+            mol = te.Canonicalize(mol)
+            
+            #Method 3
+            mol = standardizer.tautomer_parent(mol)
+       
+    
+            #Final Rules
+            mol = standardizer.standardize(mol)
+            mol_standardized = mol
+
+            # convert mol object back to SMILES
+            smiles_standardized = Chem.MolToSmiles(mol_standardized)
+
+            if smiles == smiles_standardized:
+                is_finalize = True
+                break
+
+            smiles_clean_counter[smiles_standardized] += 1
+            if smiles_standardized not in mol_dict:
+                mol_dict[smiles_standardized] = mol_standardized
+
+            smiles = smiles_standardized
+            mol = Chem.MolFromSmiles(smiles)
+
+        if not is_finalize:
+            # If the standardization process is not finalized, we choose the most common SMILES from the counter
+            smiles_standardized = smiles_clean_counter.most_common()[0][0]
+            # ... and the corresponding mol object
+            #mol_standardized = mol_dict[smiles_standardized]
+                
+        return smiles_standardized 
+    
+    except:     
+        
+        return "Cannot_do"    
+
+def protonate_smiles(smiles):
+
+    dimorphite = DimorphiteDL(min_ph=7.0, max_ph=7.0, pka_precision=0)
+    protonated_smiles = dimorphite.protonate(smiles)
+
+    #print("protonated_smiles")
+
+    if len(protonated_smiles) > 0:
+                protonated_smiles = protonated_smiles[0]
+            
+    return protonated_smiles
+    
+def smiles_to_inchikey(smiles):
+ 
+    try:
+        
+        # Convert SMILES to a molecule object
+        mol = Chem.MolFromSmiles(smiles)
+        # Convert the molecule object to an InChI string
+        inchi_string = Chem.MolToInchi(mol)
+        # Convert the InChI string to an InChIKey
+        inchi_key = Chem.inchi.InchiToInchiKey(inchi_string)
+        
+        return inchi_key
+    
+    except:     
+        
+        return "Cannot_do"    
     
 def MorganFingerprint(s):
     x = Chem.MolFromSmiles(s)
@@ -163,7 +262,7 @@ def calc_all_fp_desc(data):
     return(tox_model_data)
     
     
-liv_data = [ "2",  "3",  "5",  "6",  "7",  "8",   "10", "11", "14", "15", "16"]
+liv_data = [ "3",  "5",  "6",  "7",  "8",  "11", "14", "15", "16"]
 
 def predict_individual_liv_data(data_dummy, features, endpoint):#predict animal data
     
@@ -275,30 +374,26 @@ def main():
     )
     
     desc=pd.read_csv("./features/all_features_desc.csv", encoding='windows-1252')
-    source = ["Liver Toxicity Knowledge Base",
-            "Human hepatotoxicity",
-            "Animal hepatotoxicity A",
-            "Animal hepatotoxicity B",
-            "Preclinical hepatotoxicity",
-            "Diverse DILI A",
-            "Diverse DILI B",
-            "Diverse DILI C",
-            "BESP",
-            "Mitotox",
-            "Reactive Metabolite"]
+    source = ["Human hepatotoxicity",
+        "Animal hepatotoxicity A",
+        "Animal hepatotoxicity B",
+        "Preclinical hepatotoxicity",
+        "Diverse DILI A",
+        "Diverse DILI C",
+        "BESP",
+        "Mitotox",
+        "Reactive Metabolite"]
         
         
-    assaytype = ["DILI",
-                "Human hepatotoxicity",
-                "Animal hepatotoxicity",
-                "Animal hepatotoxicity",
-                "Animal hepatotoxicity",
-                "Heterogenous Data ",
-                "Heterogenous Data ",
-                "Heterogenous Data ",
-                "Mechanisms of Liver Toxicity",
-                "Mechanisms of Liver Toxicity",
-                "Mechanisms of Liver Toxicity"]
+    assaytype = ["Human hepatotoxicity",
+        "Animal hepatotoxicity",
+        "Animal hepatotoxicity",
+        "Animal hepatotoxicity",
+        "Heterogenous Data ",
+        "Heterogenous Data ",
+        "Mechanisms of Liver Toxicity",
+        "Mechanisms of Liver Toxicity",
+        "Mechanisms of Liver Toxicity"]
         
         
     info = pd.DataFrame({"name": liv_data, "source": source, "assaytype": assaytype})
