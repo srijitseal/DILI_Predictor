@@ -10,8 +10,8 @@ st.set_page_config(
 left_col, right_col = st.columns(2)
 
 right_col.write("# Welcome to DILI Predictor")
-right_col.write("v2.1.0")
-right_col.write("Created by Srijit Seal, Dominic Williams, Ola Spjuth and Andreas Bender")
+right_col.write("v4.0")
+right_col.write("Created by Srijit Seal, Dominic Williams, Anne Carpenter, Ola Spjuth and Andreas Bender")
 left_col.image("Logo.png")
 
 
@@ -26,7 +26,7 @@ st.markdown(
     DILI Predictor employs eleven proxy-DILI labels from in vitro 
     (e.g., mitochondrial toxicity, bile salt export pump inhibition) 
     and in vivo (e.g., preclinical rat hepatotoxicity studies) 
-    datasets along with pharmacokinetic parameters, structural fingerprints and physicochemical 
+    datasets along with pharmacokinetic parameters, structural fingerprints, and physicochemical 
     parameters as features.
     
     Select from the sidebar to predict DILI for a single molecule!
