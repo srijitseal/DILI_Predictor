@@ -28,6 +28,13 @@ from rdkit.Chem.Draw import IPythonConsole
 from rdkit.Chem import Draw
 from rdkit.Chem.Draw import rdMolDraw2D
 from rdkit.Chem.Draw import MolDraw2DSVG
+from rdkit.Chem import AddHs
+from rdkit.Chem import inchi
+from IPython.display import display
+from rdkit.Chem.MolStandardize import rdMolStandardize
+from rdkit.Chem.MolStandardize import Standardizer
+from rdkit.Chem import MolStandardize
+from collections import Counter
 
 from sklearn.decomposition import PCA
 
