@@ -4,8 +4,8 @@
 DILI is a comprehensive repository aimed at enhancing the early detection of Drug-Induced Liver Injury (DILI) through the integration of predicted in vivo and in vitro data. This project utilizes advanced machine learning models and chemical informatics to predict the likelihood of DILI for various compounds.
 For code see: https://github.com/srijitseal/DILI
 
-### Using PyPI
-You can install the DILI Predictor using pip: `pip install dilipred`
+### Using PyPI 
+You can install the DILI Predictor using pip: `pip install dilipred`. ***Please use Python <3.12, >=3.9***
 
 ### Building from Source
 You can also build from source using python-poetry:
