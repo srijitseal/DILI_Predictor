@@ -33,7 +33,7 @@ st.markdown(
     For bulk jobs, or local use: use code from https://github.com/srijitseal/DILI/raw/main/local_implementation.zip
     
     ### Want to learn more?
-    - Check out our paper at https://www.biorxiv.org/content/10.1101/2024.01.10.575128v1
+    - Check out our paper at https://pubs.acs.org/doi/10.1021/acs.chemrestox.4c00015
     """
 )
 st.markdown("---")
